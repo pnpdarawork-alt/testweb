@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="VCK Cool Space — Chakran Sauna, Onsen, Pool, Gym & Stay. Bangkok since 1995." />
+  <title>VCK Cool Space — Chakran</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════
+       NAVBAR
+  ═══════════════════════════════════════════ -->
+  <header class="navbar" id="navbar">
+    <div class="navbar__inner container">
+
+      <!-- Logo -->
+      <a href="#hero" class="navbar__logo" aria-label="VCK Cool Space Home">
+        <span class="navbar__logo-vck">VCK</span>
+        <span class="navbar__logo-text">Cool Space</span>
+      </a>
+
+      <!-- Hamburger toggle (CSS-only, no JS needed for Phase 1) -->
+      <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-hidden="true" />
+      <label for="nav-toggle" class="nav-hamburger" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </label>
+
+      <!-- Nav links + language + CTA -->
+      <nav class="navbar__nav" role="navigation" aria-label="Main navigation">
+        <ul class="navbar__links">
+          <li><a href="#events" class="navbar__link" data-i18n="nav.events">Events</a></li>
+          <li><a href="#promotion" class="navbar__link" data-i18n="nav.promotion">Promotion</a></li>
+          <li><a href="#services" class="navbar__link" data-i18n="nav.services">Services</a></li>
+          <li><a href="#gallery" class="navbar__link" data-i18n="nav.gallery">Gallery</a></li>
+          <li><a href="#contact" class="navbar__link" data-i18n="nav.contact">Contact</a></li>
+        </ul>
+
+        <!-- Language Switcher -->
+        <div class="lang-switcher" role="group" aria-label="Language selector">
+          <button class="lang-btn lang-btn--active" data-lang="th">TH</button>
+          <button class="lang-btn" data-lang="en">EN</button>
+          <button class="lang-btn" data-lang="zh-s">简体</button>
+          <button class="lang-btn" data-lang="zh-t">繁體</button>
+        </div>
+
+        <!-- Book CTA -->
+        <a href="https://www.booking.com/blucabin" target="_blank" rel="noopener noreferrer"
+           class="btn btn--gold navbar__cta" data-i18n="cta.book">จองที่พัก</a>
+      </nav>
+
+    </div>
+  </header>
+
+
+  <!-- ═══════════════════════════════════════════
+       HERO SECTION
+  ═══════════════════════════════════════════ -->
+  <section id="hero" class="hero">
+
+    <!-- Slide track (Phase 3: JS will animate) -->
+    <div class="hero__slides" aria-hidden="true">
+      <div class="hero__slide hero__slide--1"></div>
+      <div class="hero__slide hero__slide--2"></div>
+      <div class="hero__slide hero__slide--3"></div>
+    </div>
+
+    <!-- Slide indicators -->
+    <div class="hero__dots" role="tablist" aria-label="Hero slides">
+      <button class="hero__dot hero__dot--active" role="tab" aria-label="Slide 1"></button>
+      <button class="hero__dot" role="tab" aria-label="Slide 2"></button>
+      <button class="hero__dot" role="tab" aria-label="Slide 3"></button>
+    </div>
+
+    <!-- Dark overlay -->
+    <div class="hero__overlay"></div>
+
+    <!-- Content -->
+    <div class="hero__content container">
+      <p class="hero__since">Since 1995</p>
+      <h1 class="hero__title" data-i18n="hero.title">Welcome to Chakran</h1>
+      <p class="hero__subtitle" data-i18n="hero.subtitle">
+        Sauna &nbsp;·&nbsp; Onsen &nbsp;·&nbsp; Pool &nbsp;·&nbsp; Gym &nbsp;·&nbsp; Stay
+      </p>
+      <div class="hero__ctas">
+        <a href="https://www.booking.com/blucabin" target="_blank" rel="noopener noreferrer"
+           class="btn btn--gold" data-i18n="cta.book">จองที่พัก</a>
+        <a href="https://line.me/vckcoolspace" target="_blank" rel="noopener noreferrer"
+           class="btn btn--outline" data-i18n="cta.inquire">สอบถามเพิ่มเติม</a>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="hero__scroll-hint" aria-hidden="true">
+      <span></span>
+    </div>
+
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       EVENTS SECTION
+  ═══════════════════════════════════════════ -->
+  <section id="events" class="section events">
+    <div class="container">
+
+      <div class="section-header">
+        <p class="section-eyebrow" data-i18n="events.eyebrow">EVENTS</p>
+        <h2 class="section-title" data-i18n="events.title">What's On</h2>
+        <div class="section-divider"></div>
+      </div>
+
+      <!-- Today Event -->
+      <div class="events__today">
+        <div class="events__today-badge" data-i18n="events.today">Today</div>
+        <div class="events__today-card">
+          <div class="events__today-image">
+            <img src="images/placeholder-event.jpg"
+                 alt="Today's Event"
+                 class="img-cover"
+                 onerror="this.style.display='none'" />
+            <div class="img-placeholder img-placeholder--event">
+              <span>Event Photo</span>
+            </div>
+          </div>
+          <div class="events__today-info">
+            <p class="events__today-day" data-i18n="events.wednesday">Wednesday</p>
+            <h3 class="events__today-name" data-i18n="events.gomonName">โกมอน</h3>
+            <p class="events__today-name-alt" data-i18n="events.gomonNameAlt">Gomon Dark</p>
+            <p class="events__today-time">
+              <span class="events__time-icon" aria-hidden="true">⏱</span>
+              20:00 – 21:00
+            </p>
+            <a href="https://line.me/vckcoolspace" target="_blank" rel="noopener noreferrer"
+               class="btn btn--gold btn--sm" data-i18n="cta.inquire">สอบถามเพิ่มเติม</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- This Week -->
+      <div class="events__week">
+        <h3 class="events__week-title" data-i18n="events.thisWeek">This Week's Events</h3>
+
+        <div class="events__grid">
+
+          <!-- MON -->
+          <div class="events__card">
+            <div class="events__card-day" data-i18n="events.mon">MON</div>
+            <div class="events__card-img">
+              <div class="img-placeholder img-placeholder--card">
+                <span>V-Night</span>
+              </div>
+            </div>
+            <div class="events__card-body">
+              <h4 class="events__card-name" data-i18n="events.vnight">วี-ไนท์</h4>
+              <p class="events__card-name-en" data-i18n="events.vnightEn">V-Night</p>
+              <p class="events__card-time">20:00 – 21:00</p>
+            </div>
+          </div>
+
+          <!-- TUE -->
+          <div class="events__card">
+            <div class="events__card-day" data-i18n="events.tue">TUE</div>
+            <div class="events__card-img">
+              <div class="img-placeholder img-placeholder--card">
+                <span>Mask Night</span>
+              </div>
+            </div>
+            <div class="events__card-body">
+              <h4 class="events__card-name" data-i18n="events.mask">คืนหน้ากาก</h4>
+              <p class="events__card-name-en" data-i18n="events.maskEn">Mask Night</p>
+              <p class="events__card-time">20:00 – 21:00</p>
+            </div>
+          </div>
+
+          <!-- WED -->
+          <div class="events__card">
+            <div class="events__card-day" data-i18n="events.wed">WED</div>
+            <div class="events__card-img">
+              <div class="img-placeholder img-placeholder--card">
+                <span>Gomon Dark</span>
+              </div>
+            </div>
+            <div class="events__card-body">
+              <h4 class="events__card-name" data-i18n="events.gomon">โกมอน</h4>
+              <p class="events__card-name-en" data-i18n="events.gomonEn">Gomon Dark</p>
+              <p class="events__card-time">20:00 – 21:00</p>
+            </div>
+          </div>
+
+          <!-- THU (dynamic) -->
+          <div class="events__card events__card--thu">
+            <div class="events__card-day" data-i18n="events.thu">THU</div>
+            <div class="events__card-img">
+              <div class="img-placeholder img-placeholder--card img-placeholder--thu">
+                <span>X Model</span>
+              </div>
+            </div>
+            <div class="events__card-body">
+              <h4 class="events__card-name" data-i18n="events.thuName">เอ็กซ์โมเดล</h4>
+              <p class="events__card-name-en" data-i18n="events.thuNameEn">X Model</p>
+              <p class="events__card-time">20:00 – 21:00</p>
+            </div>
+          </div>
+
+          <!-- FRI -->
+          <div class="events__card events__card--multi">
+            <div class="events__card-day" data-i18n="events.fri">FRI</div>
+            <div class="events__card-multi-row">
+              <div class="events__mini-event">
+                <div class="img-placeholder img-placeholder--mini">
+                  <span>Chinko</span>
+                </div>
+                <div class="events__mini-info">
+                  <p class="events__mini-name" data-i18n="events.chinko">ชิงโกะ</p>
+                  <p class="events__mini-time">19:00 – 19:45</p>
+                </div>
+              </div>
+              <div class="events__mini-event">
+                <div class="img-placeholder img-placeholder--mini">
+                  <span>Uniform</span>
+                </div>
+                <div class="events__mini-info">
+                  <p class="events__mini-name" data-i18n="events.uniform">ยูนิฟอร์ม</p>
+                  <p class="events__mini-time">20:00 – 21:00</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SAT -->
+          <div class="events__card events__card--multi">
+            <div class="events__card-day" data-i18n="events.sat">SAT</div>
+            <div class="events__card-multi-row">
+              <div class="events__mini-event">
+                <div class="img-placeholder img-placeholder--mini">
+                  <span>Chinko</span>
+                </div>
+                <div class="events__mini-info">
+                  <p class="events__mini-name" data-i18n="events.chinko">ชิงโกะ</p>
+                  <p class="events__mini-time">19:00 – 19:45</p>
+                </div>
+              </div>
+              <div class="events__mini-event">
+                <div class="img-placeholder img-placeholder--mini">
+                  <span>Rooftop Orgy</span>
+                </div>
+                <div class="events__mini-info">
+                  <p class="events__mini-name" data-i18n="events.rooftop">รูฟท็อป</p>
+                  <p class="events__mini-time">20:00 – 21:00</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUN -->
+          <div class="events__card events__card--multi">
+            <div class="events__card-day" data-i18n="events.sun">SUN</div>
+            <div class="events__card-multi-row">
+              <div class="events__mini-event">
+                <div class="img-placeholder img-placeholder--mini">
+                  <span>Chinko</span>
+                </div>
+                <div class="events__mini-info">
+                  <p class="events__mini-name" data-i18n="events.chinko">ชิงโกะ</p>
+                  <p class="events__mini-time">19:00 – 19:45</p>
+                </div>
+              </div>
+              <div class="events__mini-event">
+                <div class="img-placeholder img-placeholder--mini">
+                  <span>Pool Party</span>
+                </div>
+                <div class="events__mini-info">
+                  <p class="events__mini-name" data-i18n="events.pool">พูลปาร์ตี้</p>
+                  <p class="events__mini-time">20:00 – 21:00</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /.events__grid -->
+      </div><!-- /.events__week -->
+
+    </div><!-- /.container -->
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       PROMOTION SECTION
+  ═══════════════════════════════════════════ -->
+  <section id="promotion" class="section promotion">
+    <div class="container">
+
+      <div class="section-header">
+        <p class="section-eyebrow" data-i18n="promo.eyebrow">PROMOTION</p>
+        <h2 class="section-title" data-i18n="promo.title">Special Offers</h2>
+        <div class="section-divider"></div>
+      </div>
+
+      <div class="promo__grid">
+
+        <!-- Value Package -->
+        <div class="promo__card">
+          <div class="promo__card-icon" aria-hidden="true">🎫</div>
+          <h3 class="promo__card-title">
+            <span data-i18n="promo.value">Value Package</span>
+          </h3>
+          <p class="promo__card-desc" data-i18n="promo.valueDesc">
+            แพ็กเกจคุ้มค่าสำหรับการใช้บริการครบครัน
+          </p>
+          <a href="https://line.me/vckcoolspace" target="_blank" rel="noopener noreferrer"
+             class="btn btn--outline-gold btn--sm" data-i18n="cta.inquire">สอบถามเพิ่มเติม</a>
+        </div>
+
+        <!-- Vclub7 Membership -->
+        <div class="promo__card promo__card--featured">
+          <div class="promo__card-icon" aria-hidden="true">🧡</div>
+          <h3 class="promo__card-title">
+            <span data-i18n="promo.vclub">Vclub7 Membership</span>
+          </h3>
+          <p class="promo__card-desc" data-i18n="promo.vclubDesc">
+            สมาชิก Vclub7 รับสิทธิพิเศษตลอดปี
+          </p>
+          <a href="https://line.me/vckcoolspace" target="_blank" rel="noopener noreferrer"
+             class="btn btn--gold btn--sm" data-i18n="cta.inquire">สอบถามเพิ่มเติม</a>
+        </div>
+
+        <!-- One Day Pass -->
+        <div class="promo__card">
+          <div class="promo__card-icon" aria-hidden="true">🎟️</div>
+          <h3 class="promo__card-title">
+            <span data-i18n="promo.daypass">One Day Pass</span>
+          </h3>
+          <p class="promo__card-desc" data-i18n="promo.daypassDesc">
+            เข้าใช้งานได้ทั้งวัน ไม่จำกัดรอบ
+          </p>
+          <a href="https://line.me/vckcoolspace" target="_blank" rel="noopener noreferrer"
+             class="btn btn--outline-gold btn--sm" data-i18n="cta.inquire">สอบถามเพิ่มเติม</a>
+        </div>
+
+        <!-- Student Special -->
+        <div class="promo__card">
+          <div class="promo__card-icon" aria-hidden="true">🎓</div>
+          <h3 class="promo__card-title">
+            <span data-i18n="promo.student">โปรนักศึกษา</span>
+          </h3>
+          <p class="promo__card-desc" data-i18n="promo.studentDesc">
+            ส่วนลดพิเศษสำหรับนักศึกษา แสดงบัตรนักศึกษา
+          </p>
+          <a href="https://line.me/vckcoolspace" target="_blank" rel="noopener noreferrer"
+             class="btn btn--outline-gold btn--sm" data-i18n="cta.inquire">สอบถามเพิ่มเติม</a>
+        </div>
+
+      </div><!-- /.promo__grid -->
+
+    </div><!-- /.container -->
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       SERVICES SECTION
+  ═══════════════════════════════════════════ -->
+  <section id="services" class="section services">
+    <div class="container">
+
+      <div class="section-header">
+        <p class="section-eyebrow" data-i18n="services.eyebrow">OUR SERVICES</p>
+        <h2 class="section-title" data-i18n="services.title">Experience</h2>
+        <div class="section-divider"></div>
+      </div>
+
+      <!-- Chakran Sauna -->
+      <div class="services__item">
+        <div class="services__item-img">
+          <div class="img-placeholder img-placeholder--service">
+            <span>Chakran Sauna</span>
+          </div>
+        </div>
+        <div class="services__item-content">
+          <p class="services__item-eyebrow" data-i18n="services.saunaEye">Signature</p>
+          <h3 class="services__item-title" data-i18n="services.saunaTitle">🛁 Chakran Sauna</h3>
+          <p class="services__item-desc" data-i18n="services.saunaDesc">
+            ซาวน่าระดับพรีเมียม พร้อมออนเซ็น สระน้ำ และห้องสตีม ใจกลางกรุงเทพฯ
+            เปิดให้บริการมาตั้งแต่ปี 1995
+          </p>
+          <a href="https://line.me/vckcoolspace" target="_blank" rel="noopener noreferrer"
+             class="btn btn--outline-gold btn--sm" data-i18n="cta.inquire">สอบถามเพิ่มเติม</a>
+        </div>
+      </div>
+
+      <!-- Vclub7 Massage -->
+      <div class="services__item services__item--reverse">
+        <div class="services__item-img">
+          <div class="img-placeholder img-placeholder--service">
+            <span>Vclub7 Massage</span>
+          </div>
+        </div>
+        <div class="services__item-content">
+          <p class="services__item-eyebrow" data-i18n="services.massageEye">Wellness</p>
+          <h3 class="services__item-title" data-i18n="services.massageTitle">🧖 Vclub7 Massage</h3>
+          <p class="services__item-desc" data-i18n="services.massageDesc">
+            บริการนวดเพื่อผ่อนคลายโดยผู้เชี่ยวชาญ หลากหลายโปรแกรม
+            จองผ่าน Line Official ได้ทันที
+          </p>
+          <a href="https://line.me/vckcoolspace" target="_blank" rel="noopener noreferrer"
+             class="btn btn--outline-gold btn--sm" data-i18n="cta.bookMassage">จองนวด</a>
+        </div>
+      </div>
+
+      <!-- Ryokan & Chino Villa -->
+      <div class="services__item">
+        <div class="services__item-img">
+          <div class="img-placeholder img-placeholder--service">
+            <span>Ryokan &amp; Chino Villa</span>
+          </div>
+        </div>
+        <div class="services__item-content">
+          <p class="services__item-eyebrow" data-i18n="services.stayEye">Stay</p>
+          <h3 class="services__item-title" data-i18n="services.stayTitle">🛏️ Ryokan &amp; Chino Villa</h3>
+          <p class="services__item-desc" data-i18n="services.stayDesc">
+            พักผ่อนในบรรยากาศสไตล์ญี่ปุ่น ที่ Yaoi Ryokan หรือ Chino Villa
+            สัมผัสความเป็นส่วนตัวในใจกลางกรุงเทพฯ
+          </p>
+          <div class="services__item-ctas">
+            <a href="https://www.booking.com/blucabin" target="_blank" rel="noopener noreferrer"
+               class="btn btn--gold btn--sm" data-i18n="cta.bookRyokan">จอง Yaoi Ryokan</a>
+            <a href="https://www.booking.com" target="_blank" rel="noopener noreferrer"
+               class="btn btn--outline-gold btn--sm" data-i18n="cta.bookVilla">จอง Chino Villa</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- IKUZE Coffee Bar -->
+      <div class="services__item services__item--reverse">
+        <div class="services__item-img">
+          <div class="img-placeholder img-placeholder--service">
+            <span>IKUZE Coffee Bar</span>
+          </div>
+        </div>
+        <div class="services__item-content">
+          <p class="services__item-eyebrow" data-i18n="services.coffeeEye">Café</p>
+          <h3 class="services__item-title" data-i18n="services.coffeeTitle">☕ IKUZE Coffee Bar</h3>
+          <p class="services__item-desc" data-i18n="services.coffeeDesc">
+            คาเฟ่บรรยากาศผ่อนคลาย พร้อมเครื่องดื่มและของว่าง
+            เปิดให้บริการระหว่างใช้สิ่งอำนวยความสะดวกต่าง ๆ
+          </p>
+        </div>
+      </div>
+
+    </div><!-- /.container -->
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       GALLERY SECTION
+  ═══════════════════════════════════════════ -->
+  <section id="gallery" class="section gallery">
+    <div class="container">
+
+      <div class="section-header">
+        <p class="section-eyebrow" data-i18n="gallery.eyebrow">GALLERY</p>
+        <h2 class="section-title" data-i18n="gallery.title">Our Space</h2>
+        <div class="section-divider"></div>
+      </div>
+
+      <div class="gallery__grid">
+        <div class="gallery__item gallery__item--large">
+          <div class="img-placeholder img-placeholder--gallery">
+            <span>Photo 1</span>
+          </div>
+        </div>
+        <div class="gallery__item">
+          <div class="img-placeholder img-placeholder--gallery">
+            <span>Photo 2</span>
+          </div>
+        </div>
+        <div class="gallery__item">
+          <div class="img-placeholder img-placeholder--gallery">
+            <span>Photo 3</span>
+          </div>
+        </div>
+        <div class="gallery__item">
+          <div class="img-placeholder img-placeholder--gallery">
+            <span>Photo 4</span>
+          </div>
+        </div>
+        <div class="gallery__item">
+          <div class="img-placeholder img-placeholder--gallery">
+            <span>Photo 5</span>
+          </div>
+        </div>
+        <div class="gallery__item">
+          <div class="img-placeholder img-placeholder--gallery">
+            <span>Photo 6</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery__footer">
+        <!-- Popup toggle (Phase 4 will add JS) -->
+        <button class="btn btn--outline-gold gallery__all-btn" data-i18n="gallery.all">
+          All Photos &nbsp;›
+        </button>
+      </div>
+
+    </div><!-- /.container -->
+
+    <!-- Gallery Popup (structure only, Phase 4 will wire JS) -->
+    <div class="gallery__popup" id="gallery-popup" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Gallery">
+      <div class="gallery__popup-overlay"></div>
+      <div class="gallery__popup-inner">
+        <button class="gallery__popup-close" aria-label="Close gallery">✕</button>
+        <div class="gallery__popup-grid">
+          <div class="img-placeholder img-placeholder--popup"><span>Photo 1</span></div>
+          <div class="img-placeholder img-placeholder--popup"><span>Photo 2</span></div>
+          <div class="img-placeholder img-placeholder--popup"><span>Photo 3</span></div>
+          <div class="img-placeholder img-placeholder--popup"><span>Photo 4</span></div>
+          <div class="img-placeholder img-placeholder--popup"><span>Photo 5</span></div>
+          <div class="img-placeholder img-placeholder--popup"><span>Photo 6</span></div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       CONTACT SECTION
+  ═══════════════════════════════════════════ -->
+  <section id="contact" class="section contact">
+    <div class="container">
+
+      <div class="section-header">
+        <p class="section-eyebrow" data-i18n="contact.eyebrow">CONTACT</p>
+        <h2 class="section-title" data-i18n="contact.title">Find Us</h2>
+        <div class="section-divider"></div>
+      </div>
+
+      <div class="contact__body">
+
+        <!-- Left: Social + Info -->
+        <div class="contact__info">
+
+          <div class="contact__social">
+            <h3 class="contact__social-title" data-i18n="contact.followUs">Follow Us</h3>
+            <div class="contact__social-links">
+              <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer"
+                 class="social-link" aria-label="Facebook">
+                <span class="social-link__icon" aria-hidden="true">f</span>
+                <span>Facebook</span>
+              </a>
+              <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer"
+                 class="social-link" aria-label="Instagram">
+                <span class="social-link__icon" aria-hidden="true">◎</span>
+                <span>Instagram</span>
+              </a>
+              <a href="https://x.com" target="_blank" rel="noopener noreferrer"
+                 class="social-link" aria-label="X (Twitter)">
+                <span class="social-link__icon" aria-hidden="true">𝕏</span>
+                <span>X.com</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="contact__details">
+            <div class="contact__detail-item">
+              <span class="contact__detail-icon" aria-hidden="true">📍</span>
+              <div>
+                <p class="contact__detail-label" data-i18n="contact.address">Address</p>
+                <p class="contact__detail-value">32 Soi Ari 4, Phayathai, Bangkok</p>
+              </div>
+            </div>
+            <div class="contact__detail-item">
+              <span class="contact__detail-icon" aria-hidden="true">📞</span>
+              <div>
+                <p class="contact__detail-label" data-i18n="contact.phone">Phone</p>
+                <p class="contact__detail-value">
+                  <a href="tel:+6622791359">+66 (0) 22791359</a>
+                </p>
+              </div>
+            </div>
+            <div class="contact__detail-item">
+              <span class="contact__detail-icon" aria-hidden="true">🕐</span>
+              <div>
+                <p class="contact__detail-label" data-i18n="contact.hours">Hours</p>
+                <p class="contact__detail-value" data-i18n="contact.hoursWeekday">จ–พฤ &nbsp;15:00 – 00:00</p>
+                <p class="contact__detail-value" data-i18n="contact.hoursWeekend">ศ–อา &nbsp;14:00 – 00:00</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact__ctas">
+            <a href="https://www.booking.com/blucabin" target="_blank" rel="noopener noreferrer"
+               class="btn btn--gold" data-i18n="cta.book">จองที่พัก</a>
+            <a href="https://line.me/vckcoolspace" target="_blank" rel="noopener noreferrer"
+               class="btn btn--outline-gold" data-i18n="cta.inquire">สอบถามเพิ่มเติม</a>
+          </div>
+
+        </div><!-- /.contact__info -->
+
+        <!-- Right: Map -->
+        <div class="contact__map">
+          <iframe
+            title="VCK Cool Space Location"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.2895!2d100.5668!3d13.7748!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDQ2JzI5LjMiTiAxMDDCsDM0JzAwLjUiRQ!5e0!3m2!1sen!2sth!4v1"
+            width="100%"
+            height="100%"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+
+      </div><!-- /.contact__body -->
+
+    </div><!-- /.container -->
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__inner">
+
+        <div class="footer__brand">
+          <span class="footer__logo-vck">VCK</span>
+          <span class="footer__logo-text">Cool Space</span>
+          <p class="footer__tagline">vckcoolspace.com</p>
+        </div>
+
+        <div class="footer__social">
+          <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer"
+             class="footer__social-link" aria-label="Facebook">Facebook</a>
+          <span aria-hidden="true"> · </span>
+          <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer"
+             class="footer__social-link" aria-label="Instagram">Instagram</a>
+          <span aria-hidden="true"> · </span>
+          <a href="https://x.com" target="_blank" rel="noopener noreferrer"
+             class="footer__social-link" aria-label="X.com">X.com</a>
+        </div>
+
+        <p class="footer__copy">&copy; 2026 VCK Cool Space. All rights reserved.</p>
+
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

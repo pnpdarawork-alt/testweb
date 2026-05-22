@@ -1,9 +1,12 @@
 /* ═══════════════════════════════════════════════════════
    VCK COOL SPACE — Static Fallback Data
    Field names match the actual Google Sheets columns:
-   Recurring_Events: TH, EN, ZH_S, ZH_T, TIME_1, TIME_2,
+   Recurring_Events: DAY, TH, EN, ZH_S, ZH_T, TIME_1, TIME_2,
                      IMAGE_URL, DETAIL_TH, DETAIL_EN, DETAIL_ZH_S, DETAIL_ZH_T,
-                     DAY, STATUS, SLOT
+                     STATUS, SLOT
+   Weekly_THU:       DATE, TH, EN, ZH_S, ZH_T, TIME,
+                     IMAGE_URL, DETAIL_TH, DETAIL_EN, DETAIL_ZH_S, DETAIL_ZH_T,
+                     STATUS
    Gallery:          IMAGE_URL, ALT_TH, ALT_EN, ORDER, STATUS
    Hero_Images:      IMAGE_URL, ORDER, STATUS
 ═══════════════════════════════════════════════════════ */
@@ -30,15 +33,18 @@ const FALLBACK = {
 
   weeklyThu: [
     {
-      STATUS:  'active',
-      DATE:    '',
-      TH:      'เอ็กซ์โมเดล',
-      EN:      'X Model',
-      ZH_S:    'X模特',
-      ZH_T:    'X模特',
-      TIME_1:  '20:00',
-      TIME_2:  '21:00',
-      IMAGE_URL: '',
+      STATUS:     'active',
+      DATE:       '',
+      TH:         'เอ็กซ์โมเดล',
+      EN:         'X Model',
+      ZH_S:       'X模特',
+      ZH_T:       'X模特',
+      TIME:       '20:00',
+      IMAGE_URL:  '',
+      DETAIL_TH:  'ทีมนักแสดง X Model สุดเซ็กซี่',
+      DETAIL_EN:  'Featuring the sexy X Model performers',
+      DETAIL_ZH_S: 'X模特性感表演',
+      DETAIL_ZH_T: 'X模特性感表演',
     },
   ],
 

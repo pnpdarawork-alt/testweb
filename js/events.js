@@ -1,7 +1,10 @@
 /* ═══════════════════════════════════════════════════════
    VCK COOL SPACE — Events Renderer
-   API field names: TH, EN, ZH_S, ZH_T, TIME_1, TIME_2,
-                    IMAGE_URL, DAY, STATUS, SLOT
+   Recurring_Events fields: TH, EN, ZH_S, ZH_T, TIME_1, TIME_2,
+                             IMAGE_URL, DETAIL_TH/EN/ZH_S/ZH_T,
+                             DAY, STATUS, SLOT
+   Weekly_THU fields:       DATE, TH, EN, ZH_S, ZH_T, TIME,
+                             IMAGE_URL, DETAIL_TH/EN/ZH_S/ZH_T, STATUS
    Fixed display order: MON → TUE → WED → THU → FRI → SAT → SUN
 ═══════════════════════════════════════════════════════ */
 
@@ -31,8 +34,10 @@ function evDetail(ev) {
 }
 
 function evTime(ev) {
+  const t  = (ev.TIME   || '').trim(); // Weekly_THU single-column
   const t1 = (ev.TIME_1 || '').trim();
   const t2 = (ev.TIME_2 || '').trim();
+  if (t)        return t;
   if (t1 && t2) return `${t1} – ${t2}`;
   return t1 || t2;
 }
@@ -62,6 +67,18 @@ function getThaiNow() {
   const dy = String(bk.getDate()).padStart(2, '0');
   const dateStr = `${y}-${m}-${dy}`;
   return { dateStr, dayName: DAY_NAMES[dayIdx], dayIdx };
+}
+
+/* Date of Thursday in the current Bangkok week (for the week-grid THU card) */
+function getWeekThuDate() {
+  const now        = new Date();
+  const bangkokStr = now.toLocaleString('en-US', { timeZone: 'Asia/Bangkok' });
+  const bk         = new Date(bangkokStr);
+  bk.setDate(bk.getDate() + (4 - bk.getDay())); // 4 = Thursday
+  const y = bk.getFullYear();
+  const m = String(bk.getMonth() + 1).padStart(2, '0');
+  const d = String(bk.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
 }
 
 /* ── DOM helpers ────────────────────────────────── */
@@ -262,7 +279,8 @@ async function initEvents() {
 
     let dayEvents = [];
     if (isThu) {
-      const thu = weeklyThu.find(e => e.DATE === todayInfo.dateStr) || weeklyThu[0];
+      const thuDate = getWeekThuDate();
+      const thu = weeklyThu.find(e => e.DATE === thuDate);
       if (thu) dayEvents = [thu];
     } else {
       dayEvents = recurring

@@ -121,6 +121,20 @@
   font-size: 30px;
 }
 
+/* Multi-event today card: stack on mobile */
+.events__today-card--multi {
+  padding: 28px 24px;
+}
+
+.events__today-events {
+  grid-template-columns: 1fr;
+  gap: 28px;
+}
+
+.events__today-event-name {
+  font-size: 22px;
+}
+
 /* Week grid: single column on mobile */
 .events__week {
   grid-template-columns: 1fr !important;

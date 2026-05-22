@@ -600,6 +600,82 @@ button {
   font-size: 16px;
 }
 
+.events__today-detail {
+  font-size: 14px;
+  color: var(--mid);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+/* ── Today Card — Multi-event (Fri/Sat/Sun) ── */
+.events__today-card--multi {
+  display: block;
+  padding: 40px 48px;
+}
+
+.events__today-multi-header {
+  margin-bottom: 28px;
+}
+
+.events__today-events {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 36px;
+}
+
+.events__today-event {
+  display: flex;
+  flex-direction: column;
+}
+
+.events__today-event-img {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 18px;
+  background: var(--border);
+}
+
+.events__today-event-name {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: 4px;
+  line-height: 1.25;
+}
+
+.events__today-event-name-alt {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--light);
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+}
+
+.events__today-event-time {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--mid);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.events__today-event-detail {
+  font-size: 13px;
+  color: var(--light);
+  line-height: 1.6;
+}
+
+.events__today-multi-cta {
+  margin-top: 28px;
+  text-align: center;
+}
+
 /* ── This Week Grid ──
    .events__week is the CSS Grid container.
    Cards are direct children — no extra wrapper needed.

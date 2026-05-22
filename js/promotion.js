@@ -2,8 +2,9 @@
    VCK COOL SPACE — Promotion Renderer
    Sheet fields: ID, TH_TITLE, EN_TITLE, ZH_S_TITLE, ZH_T_TITLE,
                  TH_DETAIL, EN_DETAIL, ZH_S_DETAIL, ZH_T_DETAIL,
-                 CTA_TH, CTA_EN, CTA_ZH_S, CTA_ZH_T, CTA_URL,
-                 STATUS, ORDER
+                 CTA_URL, STATUS, ORDER
+   CTA button text is NOT fetched — it comes from lang.js
+   translations keyed by `promo.cta.<ID>`.
 ═══════════════════════════════════════════════════════ */
 
 function getPromoName(item) {
@@ -22,15 +23,7 @@ function getPromoDesc(item) {
   return item.TH_DETAIL || item.EN_DETAIL || '';
 }
 
-function getPromoCta(item) {
-  const lang = (typeof getLang === 'function') ? getLang() : 'th';
-  if (lang === 'zh-s') return item.CTA_ZH_S || item.CTA_EN || item.CTA_TH || 'สอบถาม';
-  if (lang === 'zh-t') return item.CTA_ZH_T || item.CTA_EN || item.CTA_TH || 'สอบถาม';
-  if (lang === 'en')   return item.CTA_EN   || item.CTA_TH || 'Enquire';
-  return item.CTA_TH || item.CTA_EN || 'สอบถาม';
-}
-
-const TICKET_ICONS = { 0: '🎫', 1: '🧡', 2: '🎟️', 3: '🎓' };
+const TICKET_ICONS = { 0: '🎫', 1: '🧡', 2: '🎓', 3: '🎟️' };
 
 let _promos = [];
 
@@ -39,9 +32,9 @@ function buildTicketCard(item, idx) {
   card.className = 'ticket' + (idx === 1 ? ' ticket--featured' : '');
   card.dataset.promoIndex = idx;
 
-  const ctaUrl = item.CTA_URL || 'https://line.me/vckcoolspace';
-  const ctaText = getPromoCta(item);
-  const code = item.ID || String(idx + 1);
+  const ctaUrl  = item.CTA_URL || 'https://line.me/vckcoolspace';
+  const ctaKey  = 'promo.cta.' + (item.ID || (idx + 1));
+  const code    = item.ID || String(idx + 1);
 
   card.innerHTML = `
     <div class="ticket__body">
@@ -56,7 +49,7 @@ function buildTicketCard(item, idx) {
     <div class="ticket__stub">
       <span class="ticket__code">${code}</span>
       <a href="${ctaUrl}" target="_blank" rel="noopener noreferrer"
-         class="btn btn--gold btn--sm">${ctaText}</a>
+         class="btn btn--gold btn--sm" data-i18n="${ctaKey}"></a>
     </div>`;
 
   return card;
@@ -68,6 +61,7 @@ function renderPromoCards() {
   if (!grid) return;
   grid.innerHTML = '';
   _promos.slice(0, 4).forEach((item, i) => grid.appendChild(buildTicketCard(item, i)));
+  if (typeof applyI18n === 'function') applyI18n(grid);
 }
 
 async function initPromotion() {

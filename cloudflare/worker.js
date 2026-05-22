@@ -11,6 +11,7 @@ const ROUTES = {
   '/weekly-thu': { sheet: 'Weekly_THU',       filter: r => r.STATUS === 'active' || r.STATUS === 'draft', sort: null },
   '/promotion':  { sheet: 'Promotion',        filter: r => r.STATUS === 'active',                         sort: (a,b) => (a.ORDER||0)-(b.ORDER||0) },
   '/gallery':    { sheet: 'Gallery',          filter: r => r.STATUS === 'active',                         sort: (a,b) => (a.ORDER||0)-(b.ORDER||0) },
+  '/service':    { sheet: 'Service',          filter: r => r.STATUS === 'active',                         sort: (a,b) => (Number(a.ID)||0)-(Number(b.ID)||0) },
 };
 
 const CORS = {

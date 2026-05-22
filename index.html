@@ -140,23 +140,7 @@
       <!-- Today Event -->
       <div class="events__today">
         <div class="events__today-badge" data-i18n="events.today">Today</div>
-        <div class="events__today-card">
-          <div class="events__today-image">
-            <div class="img-placeholder img-placeholder--event">
-              <span>Event Photo</span>
-            </div>
-          </div>
-          <div class="events__today-info">
-            <p class="events__today-day"></p>
-            <h3 class="events__today-name"></h3>
-            <p class="events__today-name-alt"></p>
-            <p class="events__today-time">
-              <span class="events__time-icon" aria-hidden="true">⏱</span>
-            </p>
-            <a href="https://line.me/vckcoolspace" target="_blank" rel="noopener noreferrer"
-               class="btn btn--gold btn--sm" data-i18n="cta.inquire">สอบถามเพิ่มเติม</a>
-          </div>
-        </div>
+        <div class="events__today-card"></div>
       </div>
 
       <!-- This Week — CSS Grid: Row 1 = 4 cards (MON–THU), Row 2 = 3 wider cards (FRI–SUN) -->
@@ -198,75 +182,7 @@
         <div class="section-divider"></div>
       </div>
 
-      <!-- Chakran Sauna -->
-      <div class="services__item">
-        <div class="services__item-img">
-          <div class="img-placeholder img-placeholder--service"><span>Chakran Sauna</span></div>
-        </div>
-        <div class="services__item-content">
-          <p class="services__item-eyebrow" data-i18n="services.saunaEye">Signature</p>
-          <h3 class="services__item-title" data-i18n="services.saunaTitle">🛁 Chakran Sauna</h3>
-          <p class="services__item-desc" data-i18n="services.saunaDesc">
-            ซาวน่าระดับพรีเมียม พร้อมออนเซ็น สระน้ำ และห้องสตีม ใจกลางกรุงเทพฯ
-            เปิดให้บริการมาตั้งแต่ปี 1995
-          </p>
-          <a href="https://line.me/vckcoolspace" target="_blank" rel="noopener noreferrer"
-             class="btn btn--outline-gold btn--sm" data-i18n="cta.inquire">สอบถามเพิ่มเติม</a>
-        </div>
-      </div>
-
-      <!-- Vclub7 Massage -->
-      <div class="services__item services__item--reverse">
-        <div class="services__item-img">
-          <div class="img-placeholder img-placeholder--service"><span>Vclub7 Massage</span></div>
-        </div>
-        <div class="services__item-content">
-          <p class="services__item-eyebrow" data-i18n="services.massageEye">Wellness</p>
-          <h3 class="services__item-title" data-i18n="services.massageTitle">🧖 Vclub7 Massage</h3>
-          <p class="services__item-desc" data-i18n="services.massageDesc">
-            บริการนวดเพื่อผ่อนคลายโดยผู้เชี่ยวชาญ หลากหลายโปรแกรม
-            จองผ่าน Line Official ได้ทันที
-          </p>
-          <a href="https://line.me/vckcoolspace" target="_blank" rel="noopener noreferrer"
-             class="btn btn--outline-gold btn--sm" data-i18n="cta.bookMassage">จองนวด</a>
-        </div>
-      </div>
-
-      <!-- Ryokan & Chino Villa -->
-      <div class="services__item">
-        <div class="services__item-img">
-          <div class="img-placeholder img-placeholder--service"><span>Ryokan &amp; Chino Villa</span></div>
-        </div>
-        <div class="services__item-content">
-          <p class="services__item-eyebrow" data-i18n="services.stayEye">Stay</p>
-          <h3 class="services__item-title" data-i18n="services.stayTitle">🛏️ Ryokan &amp; Chino Villa</h3>
-          <p class="services__item-desc" data-i18n="services.stayDesc">
-            พักผ่อนในบรรยากาศสไตล์ญี่ปุ่น ที่ Yaoi Ryokan หรือ Chino Villa
-            สัมผัสความเป็นส่วนตัวในใจกลางกรุงเทพฯ
-          </p>
-          <div class="services__item-ctas">
-            <a href="https://www.booking.com/blucabin" target="_blank" rel="noopener noreferrer"
-               class="btn btn--gold btn--sm" data-i18n="cta.bookRyokan">จอง Yaoi Ryokan</a>
-            <a href="https://www.booking.com" target="_blank" rel="noopener noreferrer"
-               class="btn btn--outline-gold btn--sm" data-i18n="cta.bookVilla">จอง Chino Villa</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- IKUZE Coffee Bar -->
-      <div class="services__item services__item--reverse">
-        <div class="services__item-img">
-          <div class="img-placeholder img-placeholder--service"><span>IKUZE Coffee Bar</span></div>
-        </div>
-        <div class="services__item-content">
-          <p class="services__item-eyebrow" data-i18n="services.coffeeEye">Café</p>
-          <h3 class="services__item-title" data-i18n="services.coffeeTitle">☕ IKUZE Coffee Bar</h3>
-          <p class="services__item-desc" data-i18n="services.coffeeDesc">
-            คาเฟ่บรรยากาศผ่อนคลาย พร้อมเครื่องดื่มและของว่าง
-            เปิดให้บริการระหว่างใช้สิ่งอำนวยความสะดวกต่างๆ
-          </p>
-        </div>
-      </div>
+      <div class="services__list"></div><!-- /.services__list -->
 
     </div><!-- /.container -->
   </section>
@@ -284,27 +200,8 @@
         <div class="section-divider"></div>
       </div>
 
-      <!-- 3 cols × 2 rows = 6 equal image slots -->
-      <div class="gallery__grid">
-        <div class="gallery__item">
-          <div class="img-placeholder img-placeholder--gallery"><span>Photo 1</span></div>
-        </div>
-        <div class="gallery__item">
-          <div class="img-placeholder img-placeholder--gallery"><span>Photo 2</span></div>
-        </div>
-        <div class="gallery__item">
-          <div class="img-placeholder img-placeholder--gallery"><span>Photo 3</span></div>
-        </div>
-        <div class="gallery__item">
-          <div class="img-placeholder img-placeholder--gallery"><span>Photo 4</span></div>
-        </div>
-        <div class="gallery__item">
-          <div class="img-placeholder img-placeholder--gallery"><span>Photo 5</span></div>
-        </div>
-        <div class="gallery__item">
-          <div class="img-placeholder img-placeholder--gallery"><span>Photo 6</span></div>
-        </div>
-      </div>
+      <!-- 3 cols × 2 rows = 6 equal image slots — filled by gallery.js -->
+      <div class="gallery__grid"></div>
 
       <div class="gallery__footer">
         <button class="btn btn--outline-gold gallery__all-btn" data-i18n="gallery.all">
@@ -319,14 +216,7 @@
       <div class="gallery__popup-overlay"></div>
       <div class="gallery__popup-inner">
         <button class="gallery__popup-close" aria-label="Close gallery">✕</button>
-        <div class="gallery__popup-grid">
-          <div class="img-placeholder img-placeholder--popup"><span>Photo 1</span></div>
-          <div class="img-placeholder img-placeholder--popup"><span>Photo 2</span></div>
-          <div class="img-placeholder img-placeholder--popup"><span>Photo 3</span></div>
-          <div class="img-placeholder img-placeholder--popup"><span>Photo 4</span></div>
-          <div class="img-placeholder img-placeholder--popup"><span>Photo 5</span></div>
-          <div class="img-placeholder img-placeholder--popup"><span>Photo 6</span></div>
-        </div>
+        <div class="gallery__popup-grid"></div>
       </div>
     </div>
 
@@ -463,6 +353,7 @@
   <script src="js/hero.js"></script>
   <script src="js/events.js"></script>
   <script src="js/promotion.js"></script>
+  <script src="js/service.js"></script>
   <script src="js/gallery.js"></script>
 
 </body>

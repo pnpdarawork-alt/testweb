@@ -6,14 +6,19 @@
    Weekly_THU fields:       DATE, TH, EN, ZH_S, ZH_T, TIME,
                              IMAGE_URL, DETAIL_TH/EN/ZH_S/ZH_T, STATUS
    Fixed display order: MON → TUE → WED → THU → FRI → SAT → SUN
+   Today card: single event for MON–THU, 2 events for FRI/SAT/SUN.
 ═══════════════════════════════════════════════════════ */
 
 // Index 0=Sun … 6=Sat, matches Date.getDay()
 const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const DAY_ABBR  = ['sun','mon','tue','wed','thu','fri','sat'];
+const DAY_FULL  = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
 
 // Display order: Mon(1)→Tue(2)→Wed(3)→Thu(4)→Fri(5)→Sat(6)→Sun(0)
 const WEEK_ORDER = [1, 2, 3, 4, 5, 6, 0];
+
+// Days that show multiple events on the today card
+const MULTI_TODAY_DAYS = ['Friday', 'Saturday', 'Sunday'];
 
 // Module-level cache so langchange can re-render without re-fetching
 let _recurring = [];
@@ -66,7 +71,6 @@ function getThaiNow() {
   const bangkokStr = now.toLocaleString('en-US', { timeZone: 'Asia/Bangkok' });
   const bk         = new Date(bangkokStr);
   const dayIdx     = bk.getDay();
-  // Build YYYY-MM-DD in Bangkok time
   const y  = bk.getFullYear();
   const m  = String(bk.getMonth() + 1).padStart(2, '0');
   const dy = String(bk.getDate()).padStart(2, '0');
@@ -109,69 +113,126 @@ function makeImg(url, alt) {
   return img;
 }
 
-/* ── Today card ─────────────────────────────────── */
-
-/* Localized "Today" day-name label */
+/* Localized full day-name label ("Monday" → "วันจันทร์" / "星期一") */
 function localizedDayName(dayName) {
-  const key = 'events.' + DAY_ABBR[DAY_NAMES.indexOf(dayName)];
-  return (typeof t === 'function') ? t(key) : dayName;
+  const idx = DAY_NAMES.indexOf(dayName);
+  if (idx < 0) return dayName;
+  const fullKey = 'events.' + DAY_FULL[idx];
+  if (typeof t === 'function') {
+    const translated = t(fullKey);
+    if (translated && translated !== fullKey) return translated;
+  }
+  return dayName;
 }
+
+/* Today's events for the given Bangkok date/day */
+function getTodayEvents(recurring, weeklyThu, todayInfo) {
+  if (todayInfo.dayName === 'Thursday') {
+    const thu = weeklyThu.find(e => e.DATE === todayInfo.dateStr);
+    return thu ? [thu] : [];
+  }
+  return recurring
+    .filter(e => normalizeDayName(e.DAY) === todayInfo.dayName)
+    .sort((a, b) => (Number(a.SLOT) || 0) - (Number(b.SLOT) || 0)
+                 || (a.TIME_1 || '').localeCompare(b.TIME_1 || ''));
+}
+
+/* ── Today card ─────────────────────────────────── */
 
 function renderTodayCard(recurring, weeklyThu, todayInfo) {
   const section = document.querySelector('.events__today');
   if (!section) return;
-
-  const ev = (todayInfo.dayName === 'Thursday')
-    ? (weeklyThu.find(e => e.DATE === todayInfo.dateStr) || null)
-    : (recurring.find(e => normalizeDayName(e.DAY) === todayInfo.dayName) || null);
-
   const card = section.querySelector('.events__today-card');
   if (!card) return;
 
-  if (!ev) {
-    card.innerHTML =
-      `<div class="events__today-info" style="padding:48px;">` +
-      `<p class="events__today-day" data-i18n="events.today"></p>` +
-      `<h3 class="events__today-name" data-i18n="events.noEvent"></h3>` +
-      `</div>`;
+  const todayEvents = getTodayEvents(recurring, weeklyThu, todayInfo);
+
+  if (!todayEvents.length) {
+    card.classList.remove('events__today-card--multi');
+    card.innerHTML = `
+      <div class="events__today-info" style="padding:48px;">
+        <p class="events__today-day">${localizedDayName(todayInfo.dayName)}</p>
+        <h3 class="events__today-name" data-i18n="events.noEvent"></h3>
+      </div>`;
     if (typeof applyI18n === 'function') applyI18n(card);
     return;
   }
 
-  const dayEl    = section.querySelector('.events__today-day');
-  const nameEl   = section.querySelector('.events__today-name');
-  const altEl    = section.querySelector('.events__today-name-alt');
-  const timeEl   = section.querySelector('.events__today-time');
-  const detailEl = section.querySelector('.events__today-detail');
-  const imgWrap  = section.querySelector('.events__today-image');
+  const isMulti = MULTI_TODAY_DAYS.includes(todayInfo.dayName) && todayEvents.length > 1;
 
-  if (dayEl)  dayEl.textContent  = localizedDayName(todayInfo.dayName);
-  if (nameEl) nameEl.textContent = evName(ev);
-  if (altEl) {
+  if (isMulti) {
+    renderTodayCardMulti(card, todayEvents.slice(0, 2), todayInfo);
+  } else {
+    renderTodayCardSingle(card, todayEvents[0], todayInfo);
+  }
+}
+
+function renderTodayCardSingle(card, ev, todayInfo) {
+  card.classList.remove('events__today-card--multi');
+
+  const showAlt = getLang() !== 'en' && ev.EN;
+  const detail  = evDetail(ev);
+
+  const imgHtml = ev.IMAGE_URL
+    ? `<img src="${ev.IMAGE_URL}" alt="${ev.EN || ''}" class="img-cover" loading="lazy">`
+    : `<div class="img-placeholder img-placeholder--event"><span>${ev.EN || ''}</span></div>`;
+
+  card.innerHTML = `
+    <div class="events__today-image">${imgHtml}</div>
+    <div class="events__today-info">
+      <p class="events__today-day">${localizedDayName(todayInfo.dayName)}</p>
+      <h3 class="events__today-name">${evName(ev)}</h3>
+      ${showAlt ? `<p class="events__today-name-alt">${ev.EN}</p>` : ''}
+      <p class="events__today-time">
+        <span class="events__time-icon" aria-hidden="true">⏱</span>
+        ${evTime(ev)}
+      </p>
+      ${detail ? `<p class="events__today-detail events__card-detail">${detail}</p>` : ''}
+      <a href="https://line.me/vckcoolspace" target="_blank" rel="noopener noreferrer"
+         class="btn btn--gold btn--sm" data-i18n="cta.inquire"></a>
+    </div>`;
+
+  if (typeof applyI18n === 'function') applyI18n(card);
+}
+
+function renderTodayCardMulti(card, events, todayInfo) {
+  card.classList.add('events__today-card--multi');
+
+  const eventsHtml = events.map(ev => {
     const showAlt = getLang() !== 'en' && ev.EN;
-    altEl.textContent     = showAlt ? ev.EN : '';
-    altEl.style.display   = showAlt ? '' : 'none';
-  }
-  if (timeEl) {
-    const icon = timeEl.querySelector('.events__time-icon');
-    timeEl.textContent = '';
-    if (icon) timeEl.appendChild(icon);
-    timeEl.appendChild(document.createTextNode(' ' + evTime(ev)));
-  }
-  const detail = evDetail(ev);
-  if (detailEl) {
-    detailEl.textContent = detail;
-    detailEl.style.display = detail ? '' : 'none';
-  } else if (detail && timeEl) {
-    const p = document.createElement('p');
-    p.className = 'events__today-detail events__card-detail';
-    p.textContent = detail;
-    timeEl.insertAdjacentElement('afterend', p);
-  }
-  if (imgWrap && ev.IMAGE_URL) {
-    const img = makeImg(ev.IMAGE_URL, ev.EN);
-    if (img) { imgWrap.innerHTML = ''; imgWrap.appendChild(img); }
-  }
+    const detail  = evDetail(ev);
+    const imgHtml = ev.IMAGE_URL
+      ? `<img src="${ev.IMAGE_URL}" alt="${ev.EN || ''}" class="img-cover" loading="lazy">`
+      : `<div class="img-placeholder img-placeholder--event"><span>${ev.EN || ''}</span></div>`;
+
+    return `
+      <div class="events__today-event">
+        <div class="events__today-event-img">${imgHtml}</div>
+        <div class="events__today-event-info">
+          <h3 class="events__today-event-name">${evName(ev)}</h3>
+          ${showAlt ? `<p class="events__today-event-name-alt">${ev.EN}</p>` : ''}
+          <p class="events__today-event-time">
+            <span class="events__time-icon" aria-hidden="true">⏱</span>
+            ${evTime(ev)}
+          </p>
+          ${detail ? `<p class="events__today-event-detail">${detail}</p>` : ''}
+        </div>
+      </div>`;
+  }).join('');
+
+  card.innerHTML = `
+    <div class="events__today-multi-header">
+      <p class="events__today-day">${localizedDayName(todayInfo.dayName)}</p>
+    </div>
+    <div class="events__today-events">
+      ${eventsHtml}
+    </div>
+    <div class="events__today-multi-cta">
+      <a href="https://line.me/vckcoolspace" target="_blank" rel="noopener noreferrer"
+         class="btn btn--gold btn--sm" data-i18n="cta.inquire"></a>
+    </div>`;
+
+  if (typeof applyI18n === 'function') applyI18n(card);
 }
 
 /* ── Week card builder ──────────────────────────── */

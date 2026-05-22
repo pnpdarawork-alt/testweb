@@ -1,22 +1,28 @@
 /* ═══════════════════════════════════════════════════════
    VCK COOL SPACE — Static Fallback Data
    Field names match the actual Google Sheets columns:
-   Recurring_Events: DAY, TH, EN, ZH_S, ZH_T, TIME_1, TIME_2,
-                     IMAGE_URL, DETAIL_TH, DETAIL_EN, DETAIL_ZH_S, DETAIL_ZH_T,
-                     STATUS, SLOT
-   Weekly_THU:       DATE, TH, EN, ZH_S, ZH_T, TIME,
-                     IMAGE_URL, DETAIL_TH, DETAIL_EN, DETAIL_ZH_S, DETAIL_ZH_T,
-                     STATUS
-   Gallery:          IMAGE_URL, ALT_TH, ALT_EN, ORDER, STATUS
-   Hero_Images:      IMAGE_URL, ORDER, STATUS
+   Hero_Images:       ORDER, IMAGE_URL, STATUS
+   Recurring_Events:  DAY, TH, EN, ZH_S, ZH_T, TIME_1, TIME_2,
+                      IMAGE_URL, DETAIL_TH, DETAIL_EN, DETAIL_ZH_S, DETAIL_ZH_T,
+                      STATUS, SLOT
+   Weekly_THU:        DATE, TH, EN, ZH_S, ZH_T, TIME,
+                      IMAGE_URL, DETAIL_TH, DETAIL_EN, DETAIL_ZH_S, DETAIL_ZH_T,
+                      STATUS
+   Promotion:         ID, TH_TITLE, EN_TITLE, ZH_S_TITLE, ZH_T_TITLE,
+                      TH_DETAIL, EN_DETAIL, ZH_S_DETAIL, ZH_T_DETAIL,
+                      CTA_URL, STATUS, ORDER
+   Gallery:           ORDER, IMAGE_URL, STATUS
+   Service:           ID, TH_TITLE, EN_TITLE, ZH_S_TITLE, ZH_T_TITLE,
+                      TH_DETAIL, EN_DETAIL, ZH_S_DETAIL, ZH_T_DETAIL,
+                      IMAGE_URL, STATUS
 ═══════════════════════════════════════════════════════ */
 
 const FALLBACK = {
 
   heroImages: [
-    { ORDER: '1', STATUS: 'active', IMAGE_URL: '', ALT_TH: 'VCK Cool Space ซาวน่า', ALT_EN: 'VCK Cool Space Sauna' },
-    { ORDER: '2', STATUS: 'active', IMAGE_URL: '', ALT_TH: 'ออนเซ็น และสระน้ำ',     ALT_EN: 'Onsen & Pool' },
-    { ORDER: '3', STATUS: 'active', IMAGE_URL: '', ALT_TH: 'บรรยากาศยามค่ำคืน',     ALT_EN: 'Evening Atmosphere' },
+    { ORDER: '1', STATUS: 'active', IMAGE_URL: '' },
+    { ORDER: '2', STATUS: 'active', IMAGE_URL: '' },
+    { ORDER: '3', STATUS: 'active', IMAGE_URL: '' },
   ],
 
   recurringEvents: [
@@ -56,7 +62,6 @@ const FALLBACK = {
       EN_DETAIL: 'Buy 5 Get 1 Free 1,099 THB / Buy 10 Get 2 Free 2,099 THB / Valid every day',
       ZH_S_DETAIL: '买5送1 1,099泰铢 / 买10送2 2,099泰铢 / 每天可用',
       ZH_T_DETAIL: '買5送1 1,099泰銖 / 買10送2 2,099泰銖 / 每天可用',
-      CTA_TH: 'ซื้อบัตร', CTA_EN: 'Buy Now', CTA_ZH_S: '立即购买', CTA_ZH_T: '立即購買',
       CTA_URL: 'https://line.me/vckcoolspace',
     },
     {
@@ -66,7 +71,6 @@ const FALLBACK = {
       EN_DETAIL: 'Entrance discount + special privileges / Age promotion on Sundays (Thai nationals)',
       ZH_S_DETAIL: '入场折扣+特权 / 周日年龄优惠（泰国人）',
       ZH_T_DETAIL: '入場折扣+特權 / 週日年齡優惠（泰國人）',
-      CTA_TH: 'สมัครสมาชิก', CTA_EN: 'Join Now', CTA_ZH_S: '立即加入', CTA_ZH_T: '立即加入',
       CTA_URL: 'https://line.me/vckcoolspace',
     },
     {
@@ -76,7 +80,6 @@ const FALLBACK = {
       EN_DETAIL: 'Age 23 and under only 160 THB/visit / Valid every day',
       ZH_S_DETAIL: '23岁及以下仅160泰铢/次 / 每天可用',
       ZH_T_DETAIL: '23歲及以下僅160泰銖/次 / 每天可用',
-      CTA_TH: 'สอบถามเพิ่มเติม', CTA_EN: 'Enquire', CTA_ZH_S: '立即咨询', CTA_ZH_T: '立即諮詢',
       CTA_URL: 'https://line.me/vckcoolspace',
     },
     {
@@ -86,18 +89,56 @@ const FALLBACK = {
       EN_DETAIL: '450 THB Buy 1 Get 1 / Earn 1 point per visit / Collect 10 points get 1 free entry / Free ticket valid Mon–Thu only',
       ZH_S_DETAIL: '450泰铢买一送一 / 每次获1积分 / 积满10分免费入场1次 / 免费券仅限周一至周四',
       ZH_T_DETAIL: '450泰銖買一送一 / 每次獲1積分 / 積滿10分免費入場1次 / 免費券僅限週一至週四',
-      CTA_TH: 'สอบถามเพิ่มเติม', CTA_EN: 'Enquire', CTA_ZH_S: '立即咨询', CTA_ZH_T: '立即諮詢',
       CTA_URL: 'https://line.me/vckcoolspace',
     },
   ],
 
   gallery: [
-    { ORDER: '1', STATUS: 'active', IMAGE_URL: '', ALT_TH: 'ซาวน่า',   ALT_EN: 'Sauna' },
-    { ORDER: '2', STATUS: 'active', IMAGE_URL: '', ALT_TH: 'ออนเซ็น',  ALT_EN: 'Onsen' },
-    { ORDER: '3', STATUS: 'active', IMAGE_URL: '', ALT_TH: 'สระน้ำ',   ALT_EN: 'Pool' },
-    { ORDER: '4', STATUS: 'active', IMAGE_URL: '', ALT_TH: 'ฟิตเนส',   ALT_EN: 'Gym' },
-    { ORDER: '5', STATUS: 'active', IMAGE_URL: '', ALT_TH: 'ห้องพัก',  ALT_EN: 'Room' },
-    { ORDER: '6', STATUS: 'active', IMAGE_URL: '', ALT_TH: 'คาเฟ่',    ALT_EN: 'Café' },
+    { ORDER: '1', STATUS: 'active', IMAGE_URL: '' },
+    { ORDER: '2', STATUS: 'active', IMAGE_URL: '' },
+    { ORDER: '3', STATUS: 'active', IMAGE_URL: '' },
+    { ORDER: '4', STATUS: 'active', IMAGE_URL: '' },
+    { ORDER: '5', STATUS: 'active', IMAGE_URL: '' },
+    { ORDER: '6', STATUS: 'active', IMAGE_URL: '' },
+  ],
+
+  service: [
+    {
+      ID: '1', STATUS: 'active',
+      TH_TITLE: '🛁 Chakran Sauna', EN_TITLE: '🛁 Chakran Sauna', ZH_S_TITLE: '🛁 Chakran 桑拿', ZH_T_TITLE: '🛁 Chakran 桑拿',
+      TH_DETAIL: 'ซาวน่าระดับพรีเมียม พร้อมออนเซ็น สระน้ำ และห้องสตีม ใจกลางกรุงเทพฯ เปิดให้บริการมาตั้งแต่ปี 1995',
+      EN_DETAIL: 'Premium sauna with onsen, pool and steam room in the heart of Bangkok. Open since 1995.',
+      ZH_S_DETAIL: '位于曼谷市中心的高级桑拿，配备温泉、泳池和蒸汽室，自1995年起开业。',
+      ZH_T_DETAIL: '位於曼谷市中心的高級桑拿，配備溫泉、泳池和蒸汽室，自1995年起開業。',
+      IMAGE_URL: '',
+    },
+    {
+      ID: '2', STATUS: 'active',
+      TH_TITLE: '🧖 Vclub7 Massage', EN_TITLE: '🧖 Vclub7 Massage', ZH_S_TITLE: '🧖 Vclub7 按摩', ZH_T_TITLE: '🧖 Vclub7 按摩',
+      TH_DETAIL: 'บริการนวดเพื่อผ่อนคลายโดยผู้เชี่ยวชาญ หลากหลายโปรแกรม จองผ่าน Line Official ได้ทันที',
+      EN_DETAIL: 'Expert relaxation massage with multiple programs. Book instantly via Line Official.',
+      ZH_S_DETAIL: '专业放松按摩，多种套餐可选，可通过 Line Official 即时预订。',
+      ZH_T_DETAIL: '專業放鬆按摩，多種套餐可選，可通過 Line Official 即時預訂。',
+      IMAGE_URL: '',
+    },
+    {
+      ID: '3', STATUS: 'active',
+      TH_TITLE: '🛏️ Ryokan & Chino Villa', EN_TITLE: '🛏️ Ryokan & Chino Villa', ZH_S_TITLE: '🛏️ Ryokan & Chino Villa', ZH_T_TITLE: '🛏️ Ryokan & Chino Villa',
+      TH_DETAIL: 'พักผ่อนในบรรยากาศสไตล์ญี่ปุ่น ที่ Yaoi Ryokan หรือ Chino Villa สัมผัสความเป็นส่วนตัวในใจกลางกรุงเทพฯ',
+      EN_DETAIL: 'Rest in a Japanese-inspired setting at Yaoi Ryokan or Chino Villa — an intimate retreat in central Bangkok.',
+      ZH_S_DETAIL: '在 Yaoi Ryokan 或 Chino Villa 享受日式风情住宿体验，曼谷市中心的私密度假。',
+      ZH_T_DETAIL: '在 Yaoi Ryokan 或 Chino Villa 享受日式風情住宿體驗，曼谷市中心的私密度假。',
+      IMAGE_URL: '',
+    },
+    {
+      ID: '4', STATUS: 'active',
+      TH_TITLE: '☕ IKUZE Coffee Bar', EN_TITLE: '☕ IKUZE Coffee Bar', ZH_S_TITLE: '☕ IKUZE 咖啡吧', ZH_T_TITLE: '☕ IKUZE 咖啡吧',
+      TH_DETAIL: 'คาเฟ่บรรยากาศผ่อนคลาย พร้อมเครื่องดื่มและของว่าง เปิดให้บริการระหว่างใช้สิ่งอำนวยความสะดวกต่างๆ',
+      EN_DETAIL: 'Relaxed café with drinks and light snacks, open during your facility visit.',
+      ZH_S_DETAIL: '休闲咖啡馆，提供饮品和小食，开放于设施使用期间。',
+      ZH_T_DETAIL: '休閒咖啡館，提供飲品和小食，開放於設施使用期間。',
+      IMAGE_URL: '',
+    },
   ],
 
 };

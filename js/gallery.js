@@ -1,15 +1,14 @@
 /* ═══════════════════════════════════════════════════════
    VCK COOL SPACE — Gallery + Lightbox
-   API fields: IMAGE_URL, ALT_TH, ALT_EN, ORDER, STATUS
+   API fields: ORDER, IMAGE_URL, STATUS
    Renders 3×2 grid; "All Photos >" opens fullscreen lightbox.
 ═══════════════════════════════════════════════════════ */
 
 let allGalleryImages = [];
 
 function galleryAlt(item) {
-  const lang = (typeof getLang === 'function') ? getLang() : 'th';
-  if (lang === 'en') return item.ALT_EN || item.ALT_TH || '';
-  return item.ALT_TH || item.ALT_EN || '';
+  // ALT fields removed from sheet — generic label for accessibility
+  return `VCK Cool Space ${item.ORDER || ''}`.trim();
 }
 
 function buildGalleryItem(item) {
@@ -27,7 +26,6 @@ function buildGalleryItem(item) {
   } else {
     const ph = document.createElement('div');
     ph.className = 'img-placeholder img-placeholder--gallery';
-    ph.innerHTML = `<span>${galleryAlt(item)}</span>`;
     el.appendChild(ph);
   }
 
@@ -55,7 +53,6 @@ function buildPopupGrid(images) {
     } else {
       const ph = document.createElement('div');
       ph.className = 'img-placeholder img-placeholder--popup';
-      ph.innerHTML = `<span>${galleryAlt(item)}</span>`;
       el.appendChild(ph);
     }
     grid.appendChild(el);

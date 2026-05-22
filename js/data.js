@@ -21,3 +21,4 @@ async function fetchRecurringEvents() { return _fetch('/recurring',  'recurringE
 async function fetchWeeklyThu()       { return _fetch('/weekly-thu', 'weeklyThu'); }
 async function fetchPromotion()       { return _fetch('/promotion',  'promotion'); }
 async function fetchGallery()         { return _fetch('/gallery',    'gallery'); }
+async function fetchService()         { return _fetch('/service',    'service'); }

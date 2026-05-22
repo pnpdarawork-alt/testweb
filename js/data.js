@@ -3,7 +3,7 @@
    Fetches from Cloudflare Worker API, falls back to FALLBACK.
 ═══════════════════════════════════════════════════════ */
 
-const API_BASE = 'https://vck-data.YOUR_SUBDOMAIN.workers.dev';
+const API_BASE = 'https://vck-data.panupondara-work.workers.dev';
 
 async function _fetch(path, fallbackKey) {
   try {

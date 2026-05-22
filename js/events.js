@@ -18,6 +18,7 @@ const WEEK_ORDER = [1, 2, 3, 4, 5, 6, 0];
 // Module-level cache so langchange can re-render without re-fetching
 let _recurring = [];
 let _weeklyThu = [];
+let _eventsReady = false; // true once initEvents has fetched (or fallen back)
 
 /* ── Field accessors ──────────────────────────────── */
 
@@ -110,34 +111,30 @@ function makeImg(url, alt) {
 
 /* ── Today card ─────────────────────────────────── */
 
+/* Localized "Today" day-name label */
+function localizedDayName(dayName) {
+  const key = 'events.' + DAY_ABBR[DAY_NAMES.indexOf(dayName)];
+  return (typeof t === 'function') ? t(key) : dayName;
+}
+
 function renderTodayCard(recurring, weeklyThu, todayInfo) {
   const section = document.querySelector('.events__today');
-  if (!section) { console.warn('[events] .events__today not found'); return; }
+  if (!section) return;
 
-  console.log('[events] today:', todayInfo.dayName, todayInfo.dateStr);
+  const ev = (todayInfo.dayName === 'Thursday')
+    ? (weeklyThu.find(e => e.DATE === todayInfo.dateStr) || null)
+    : (recurring.find(e => normalizeDayName(e.DAY) === todayInfo.dayName) || null);
 
-  let ev = null;
-  if (todayInfo.dayName === 'Thursday') {
-    console.log('[events] today THU — target date:', todayInfo.dateStr);
-    console.log('[events] today THU — Weekly_THU DATE values:',
-      weeklyThu.map(e => e.DATE));
-    ev = weeklyThu.find(e => e.DATE === todayInfo.dateStr) || null;
-    console.log('[events] today THU event matched:', ev);
-  } else {
-    ev = recurring.find(e => normalizeDayName(e.DAY) === todayInfo.dayName) || null;
-    console.log('[events] today event (Recurring_Events):', ev);
-  }
+  const card = section.querySelector('.events__today-card');
+  if (!card) return;
 
   if (!ev) {
-    console.log('[events] no event for today');
-    const card = section.querySelector('.events__today-card');
-    if (card) {
-      card.innerHTML =
-        `<div class="events__today-info" style="padding:48px;">` +
-        `<p class="events__today-day" data-i18n="events.today"></p>` +
-        `<h3 class="events__today-name" data-i18n="events.noEvent"></h3>` +
-        `</div>`;
-    }
+    card.innerHTML =
+      `<div class="events__today-info" style="padding:48px;">` +
+      `<p class="events__today-day" data-i18n="events.today"></p>` +
+      `<h3 class="events__today-name" data-i18n="events.noEvent"></h3>` +
+      `</div>`;
+    if (typeof applyI18n === 'function') applyI18n(card);
     return;
   }
 
@@ -148,27 +145,28 @@ function renderTodayCard(recurring, weeklyThu, todayInfo) {
   const detailEl = section.querySelector('.events__today-detail');
   const imgWrap  = section.querySelector('.events__today-image');
 
-  if (dayEl)  dayEl.textContent  = todayInfo.dayName;
-  if (nameEl) nameEl.textContent = ev.TH  || ev.EN || '';
-  if (altEl)  altEl.textContent  = ev.EN  || '';
+  if (dayEl)  dayEl.textContent  = localizedDayName(todayInfo.dayName);
+  if (nameEl) nameEl.textContent = evName(ev);
+  if (altEl) {
+    const showAlt = getLang() !== 'en' && ev.EN;
+    altEl.textContent     = showAlt ? ev.EN : '';
+    altEl.style.display   = showAlt ? '' : 'none';
+  }
   if (timeEl) {
     const icon = timeEl.querySelector('.events__time-icon');
     timeEl.textContent = '';
     if (icon) timeEl.appendChild(icon);
     timeEl.appendChild(document.createTextNode(' ' + evTime(ev)));
   }
+  const detail = evDetail(ev);
   if (detailEl) {
-    const detail = evDetail(ev);
     detailEl.textContent = detail;
     detailEl.style.display = detail ? '' : 'none';
-  } else {
-    const detail = evDetail(ev);
-    if (detail && timeEl) {
-      const p = document.createElement('p');
-      p.className = 'events__today-detail events__card-detail';
-      p.textContent = detail;
-      timeEl.insertAdjacentElement('afterend', p);
-    }
+  } else if (detail && timeEl) {
+    const p = document.createElement('p');
+    p.className = 'events__today-detail events__card-detail';
+    p.textContent = detail;
+    timeEl.insertAdjacentElement('afterend', p);
   }
   if (imgWrap && ev.IMAGE_URL) {
     const img = makeImg(ev.IMAGE_URL, ev.EN);
@@ -256,17 +254,17 @@ function buildWeekCard(dayIdx, dayEvents, isThu, isToday) {
 /* ── Render week section (called on init and langchange) ── */
 
 function renderWeekSection() {
+  if (!_eventsReady) return; // skip the langchange firing before initEvents completes
+
   const week = document.querySelector('.events__week');
   if (!week) return;
 
   const todayInfo = getThaiNow();
-  console.log('[events] Bangkok now:', todayInfo);
-
   renderTodayCard(_recurring, _weeklyThu, todayInfo);
 
-  // Remove stale cards, keep the h3 title intact
   week.querySelectorAll('.events__card').forEach(c => c.remove());
 
+  const thuDate = getWeekThuDate();
   for (const dayIdx of WEEK_ORDER) {
     const dayName = DAY_NAMES[dayIdx];
     const isThu   = dayName === 'Thursday';
@@ -274,12 +272,7 @@ function renderWeekSection() {
 
     let dayEvents = [];
     if (isThu) {
-      const thuDate = getWeekThuDate();
-      console.log('[events] THU lookup — target date:', thuDate);
-      console.log('[events] THU lookup — Weekly_THU DATE values:',
-        _weeklyThu.map(e => e.DATE));
       const thu = _weeklyThu.find(e => e.DATE === thuDate);
-      console.log('[events] THU lookup — matched row:', thu);
       if (thu) dayEvents = [thu];
     } else {
       dayEvents = _recurring
@@ -288,36 +281,31 @@ function renderWeekSection() {
                      || (a.TIME_1 || '').localeCompare(b.TIME_1 || ''));
     }
 
-    if (!dayEvents.length) {
-      dayEvents = [{ TH: '—', EN: '—' }];
-    }
+    if (!dayEvents.length) dayEvents = [{ TH: '—', EN: '—' }];
 
-    console.log(`[events] ${dayName}${isToday ? ' ★TODAY' : ''}:`, dayEvents);
     week.appendChild(buildWeekCard(dayIdx, dayEvents, isThu, isToday));
   }
 
-  if (typeof switchLanguage === 'function') switchLanguage(getLang());
+  // Translate just the data-i18n day labels we just created — no recursion
+  if (typeof applyI18n === 'function') applyI18n(week);
 }
 
 /* ── Main init ──────────────────────────────────── */
 
 async function initEvents() {
   const week = document.querySelector('.events__week');
-  if (!week) { console.error('[events] FATAL: .events__week not found'); return; }
+  if (!week) return;
 
-  console.log('[events] fetching data…');
   try {
     [_recurring, _weeklyThu] = await Promise.all([
       fetchRecurringEvents(),
       fetchWeeklyThu(),
     ]);
   } catch (err) {
-    console.error('[events] Promise.all failed:', err);
+    console.error('[events] fetch failed:', err);
   }
 
-  console.log('[events] recurring:', _recurring.length, _recurring);
-  console.log('[events] weeklyThu:', _weeklyThu.length, _weeklyThu);
-
+  _eventsReady = true;
   renderWeekSection();
 }
 

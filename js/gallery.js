@@ -8,8 +8,8 @@ let allGalleryImages = [];
 
 function galleryAlt(item) {
   const lang = (typeof getLang === 'function') ? getLang() : 'th';
-  return (lang === 'th' ? item.ALT_TH : item.ALT_EN)
-      || item.ALT_TH || item.ALT_EN || '';
+  if (lang === 'en') return item.ALT_EN || item.ALT_TH || '';
+  return item.ALT_TH || item.ALT_EN || '';
 }
 
 function buildGalleryItem(item) {
@@ -79,21 +79,16 @@ function closeLightbox() {
 
 async function initGallery() {
   const grid = document.querySelector('.gallery__grid');
-  if (!grid) { console.warn('[gallery] .gallery__grid not found'); return; }
+  if (!grid) return;
 
-  console.log('[gallery] fetching images…');
   let images = [];
   try {
     images = await fetchGallery();
   } catch (err) {
-    console.error('[gallery] fetchGallery failed:', err);
+    console.error('[gallery] fetch failed:', err);
   }
 
-  console.log('[gallery] received:', images.length, images);
-  if (!images || images.length === 0) {
-    console.warn('[gallery] no images returned, keeping placeholders');
-    return;
-  }
+  if (!images || images.length === 0) return;
 
   allGalleryImages = images;
 
@@ -115,8 +110,9 @@ async function initGallery() {
 }
 
 function renderGalleryGrid() {
+  if (!allGalleryImages.length) return; // langchange firing before initGallery completes
   const grid = document.querySelector('.gallery__grid');
-  if (!grid || !allGalleryImages.length) return;
+  if (!grid) return;
   grid.innerHTML = '';
   allGalleryImages.slice(0, 6).forEach(item => grid.appendChild(buildGalleryItem(item)));
 }

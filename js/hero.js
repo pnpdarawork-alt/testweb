@@ -8,25 +8,19 @@
 (async function initHero() {
   const track    = document.querySelector('.hero__slides');
   const dotsWrap = document.querySelector('.hero__dots');
-  if (!track || !dotsWrap) {
-    console.warn('[hero] slide containers not found');
-    return;
-  }
+  if (!track || !dotsWrap) return;
 
-  console.log('[hero] fetching hero images…');
   let images = [];
   try {
     images = await fetchHeroImages();
   } catch (err) {
-    console.error('[hero] fetchHeroImages failed:', err);
+    console.error('[hero] fetch failed:', err);
   }
 
   const validImages = (images || []).filter(img => img.IMAGE_URL && img.IMAGE_URL.trim());
-  console.log('[hero] valid images:', validImages.length, validImages);
 
   if (!validImages.length) {
-    console.warn('[hero] no IMAGE_URL found — keeping static CSS gradient slides');
-    startSlideshow(track, dotsWrap); // animate the static placeholders
+    startSlideshow(track, dotsWrap);
     return;
   }
 

@@ -1,19 +1,23 @@
 /* ═══════════════════════════════════════════════════════
    VCK COOL SPACE — Promotion Renderer
-   Fetches promos from API, renders ticket-style cards.
+   Sheet fields: ORDER, CODE, TH, EN, ZH_S, ZH_T,
+                 DESC_TH, DESC_EN, DESC_ZHS, DESC_ZHT, STATUS
 ═══════════════════════════════════════════════════════ */
-
-function getPromoDesc(item) {
-  const lang = (typeof getLang === 'function') ? getLang() : 'th';
-  if (lang === 'zh-s' && item.DESC_ZHS) return item.DESC_ZHS;
-  if (lang === 'zh-t' && item.DESC_ZHT) return item.DESC_ZHT;
-  if (lang === 'en'   && item.DESC_EN)  return item.DESC_EN;
-  return item.DESC_TH || item.DESC_EN || '';
-}
 
 function getPromoName(item) {
   const lang = (typeof getLang === 'function') ? getLang() : 'th';
-  return (lang === 'th' ? item.NAME_TH : item.NAME_EN) || item.NAME_TH || item.NAME_EN || '';
+  if (lang === 'zh-s') return item.ZH_S || item.EN || item.TH || '';
+  if (lang === 'zh-t') return item.ZH_T || item.EN || item.TH || '';
+  if (lang === 'en')   return item.EN   || item.TH || '';
+  return item.TH || item.EN || '';
+}
+
+function getPromoDesc(item) {
+  const lang = (typeof getLang === 'function') ? getLang() : 'th';
+  if (lang === 'zh-s') return item.DESC_ZHS || item.DESC_EN || item.DESC_TH || '';
+  if (lang === 'zh-t') return item.DESC_ZHT || item.DESC_EN || item.DESC_TH || '';
+  if (lang === 'en')   return item.DESC_EN  || item.DESC_TH || '';
+  return item.DESC_TH || item.DESC_EN || '';
 }
 
 const TICKET_ICONS = { 0: '🎫', 1: '🧡', 2: '🎟️', 3: '🎓' };
@@ -25,14 +29,13 @@ function buildTicketCard(item, idx) {
   card.className = 'ticket' + (idx === 1 ? ' ticket--featured' : '');
   card.dataset.promoIndex = idx;
 
-  const descKey = ['promo.valueDesc','promo.vclubDesc','promo.daypassDesc','promo.studentDesc'][idx] || '';
-  const nameKey = ['promo.value','promo.vclub','promo.daypass','promo.student'][idx] || '';
-
+  /* Dynamic name/desc come from API in the current language — no data-i18n.
+     The "Inquire" CTA stays static and keeps data-i18n. */
   card.innerHTML = `
     <div class="ticket__body">
       <div class="ticket__icon" aria-hidden="true">${TICKET_ICONS[idx] || '🎫'}</div>
-      <h3 class="ticket__name" data-i18n="${nameKey}">${getPromoName(item)}</h3>
-      <p class="ticket__desc" data-i18n="${descKey}">${getPromoDesc(item)}</p>
+      <h3 class="ticket__name">${getPromoName(item)}</h3>
+      <p class="ticket__desc">${getPromoDesc(item)}</p>
     </div>
     <div class="ticket__perf">
       <span class="ticket__notch ticket__notch--l"></span>
@@ -48,13 +51,12 @@ function buildTicketCard(item, idx) {
 }
 
 function renderPromoCards() {
+  if (!_promos.length) return; // langchange firing before initPromotion completes
   const grid = document.querySelector('.promo__grid');
-  if (!grid || !_promos.length) return;
+  if (!grid) return;
   grid.innerHTML = '';
-  _promos.slice(0, 4).forEach((item, i) => {
-    grid.appendChild(buildTicketCard(item, i));
-  });
-  if (typeof switchLanguage === 'function') switchLanguage(getLang());
+  _promos.slice(0, 4).forEach((item, i) => grid.appendChild(buildTicketCard(item, i)));
+  if (typeof applyI18n === 'function') applyI18n(grid);
 }
 
 async function initPromotion() {

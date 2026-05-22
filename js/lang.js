@@ -343,22 +343,30 @@ const translations = {
   },
 };
 
+/* Translate all [data-i18n] inside `root` (default: whole document).
+   Render modules call this on newly-built fragments instead of
+   re-invoking switchLanguage (which would recurse via langchange). */
+function applyI18n(root) {
+  root = root || document;
+  const dict = translations[getLang()] || translations.th;
+  root.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key] !== undefined) el.textContent = dict[key];
+  });
+}
+
 function switchLanguage(lang) {
   if (!translations[lang]) return;
   localStorage.setItem('vck-lang', lang);
   document.documentElement.lang = lang === 'th' ? 'th' : lang === 'en' ? 'en' : 'zh';
 
-  const t = translations[lang];
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    if (t[key] !== undefined) el.textContent = t[key];
-  });
+  applyI18n(document);
 
   document.querySelectorAll('.lang-btn').forEach(btn => {
     btn.classList.toggle('lang-btn--active', btn.dataset.lang === lang);
   });
 
-  document.dispatchEvent(new CustomEvent('langchange', { detail: { lang, t } }));
+  document.dispatchEvent(new CustomEvent('langchange', { detail: { lang } }));
 }
 
 function getLang() {

@@ -705,6 +705,13 @@ button {
   letter-spacing: 0.05em;
 }
 
+.events__card-detail {
+  font-size: 0.85rem;
+  color: var(--color-muted, var(--light));
+  margin-top: 0.25rem;
+  line-height: 1.5;
+}
+
 /* Multi-event cards (FRI/SAT/SUN): no image, show stacked mini events */
 .events__card--multi .events__card-img {
   display: none;

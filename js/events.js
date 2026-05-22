@@ -22,6 +22,14 @@ function evName(ev) {
   return ev.TH || ev.EN || '';
 }
 
+function evDetail(ev) {
+  const lang = (typeof getLang === 'function') ? getLang() : 'th';
+  if (lang === 'zh-s') return ev.DETAIL_ZH_S || ev.DETAIL_EN || ev.DETAIL_TH || '';
+  if (lang === 'zh-t') return ev.DETAIL_ZH_T || ev.DETAIL_EN || ev.DETAIL_TH || '';
+  if (lang === 'en')   return ev.DETAIL_EN   || ev.DETAIL_TH || '';
+  return ev.DETAIL_TH || ev.DETAIL_EN || '';
+}
+
 function evTime(ev) {
   const t1 = (ev.TIME_1 || '').trim();
   const t2 = (ev.TIME_2 || '').trim();
@@ -164,9 +172,11 @@ function buildWeekCard(dayIdx, dayEvents, isThu, isToday) {
 
       const info = document.createElement('div');
       info.className = 'events__mini-info';
+      const miniDetail = evDetail(ev);
       info.innerHTML =
         `<p class="events__mini-name">${evName(ev)}</p>` +
-        `<p class="events__mini-time">${evTime(ev)}</p>`;
+        `<p class="events__mini-time">${evTime(ev)}</p>` +
+        (miniDetail ? `<p class="events__card-detail">${miniDetail}</p>` : '');
 
       mini.appendChild(imgDiv);
       mini.appendChild(info);
@@ -184,10 +194,12 @@ function buildWeekCard(dayIdx, dayEvents, isThu, isToday) {
 
     const body = document.createElement('div');
     body.className = 'events__card-body';
+    const detail = evDetail(ev);
     body.innerHTML =
       `<h4 class="events__card-name">${evName(ev)}</h4>` +
       `<p class="events__card-name-en">${ev.EN || ''}</p>` +
-      `<p class="events__card-time">${evTime(ev)}</p>`;
+      `<p class="events__card-time">${evTime(ev)}</p>` +
+      (detail ? `<p class="events__card-detail">${detail}</p>` : '');
     card.appendChild(body);
   }
 

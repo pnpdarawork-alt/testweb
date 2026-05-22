@@ -552,8 +552,21 @@ button {
 }
 
 .events__today-image {
+  align-self: stretch;
   position: relative;
   min-height: 280px;
+  overflow: hidden;
+}
+
+.events__today-image > img,
+.events__today-image > .img-placeholder {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+  min-height: unset;
 }
 
 .events__today-info {
@@ -636,6 +649,17 @@ button {
   overflow: hidden;
   margin-bottom: 14px;
   background: var(--border);
+}
+
+.events__today-event-img > img,
+.events__today-event-img > .img-placeholder {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+  min-height: unset;
 }
 
 .events__today-event-name {
@@ -1237,19 +1261,23 @@ button {
 }
 
 .gallery__photo-close {
-  position: absolute;
-  top: -44px;
-  right: 0;
-  font-size: 20px;
-  color: rgba(255,255,255,0.7);
-  padding: 8px 12px;
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 3;
+  font-size: 22px;
+  color: rgba(255,255,255,0.8);
+  padding: 10px 14px;
   line-height: 1;
-  background: transparent;
+  background: rgba(0,0,0,0.45);
   border-radius: var(--radius);
-  transition: color var(--transition);
+  transition: background var(--transition), color var(--transition);
 }
 
-.gallery__photo-close:hover { color: var(--gold); }
+.gallery__photo-close:hover {
+  background: rgba(0,0,0,0.75);
+  color: var(--gold);
+}
 
 .gallery__photo-prev,
 .gallery__photo-next {

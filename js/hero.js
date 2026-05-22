@@ -1,26 +1,45 @@
 /* ═══════════════════════════════════════════════════════
    VCK COOL SPACE — Hero Slideshow
-   Fetches images from API, fades every 4 seconds.
+   API fields: IMAGE_URL, ORDER, STATUS
+   Fades between slides every 4 seconds.
+   Falls back to the existing CSS gradient slides if no images.
 ═══════════════════════════════════════════════════════ */
 
 (async function initHero() {
-  const track   = document.querySelector('.hero__slides');
+  const track    = document.querySelector('.hero__slides');
   const dotsWrap = document.querySelector('.hero__dots');
-  if (!track || !dotsWrap) return;
+  if (!track || !dotsWrap) {
+    console.warn('[hero] slide containers not found');
+    return;
+  }
 
-  const images = await fetchHeroImages();
-  if (!images || images.length === 0) return;
+  console.log('[hero] fetching hero images…');
+  let images = [];
+  try {
+    images = await fetchHeroImages();
+  } catch (err) {
+    console.error('[hero] fetchHeroImages failed:', err);
+  }
 
-  const validImages = images.filter(img => img.IMAGE_URL);
-  if (validImages.length === 0) return;
+  const validImages = (images || []).filter(img => img.IMAGE_URL && img.IMAGE_URL.trim());
+  console.log('[hero] valid images:', validImages.length, validImages);
 
-  track.innerHTML  = '';
+  if (!validImages.length) {
+    console.warn('[hero] no IMAGE_URL found — keeping static CSS gradient slides');
+    startSlideshow(track, dotsWrap); // animate the static placeholders
+    return;
+  }
+
+  // Build slides from API data
+  track.innerHTML    = '';
   dotsWrap.innerHTML = '';
 
   validImages.forEach((img, i) => {
     const slide = document.createElement('div');
     slide.className = 'hero__slide' + (i === 0 ? ' hero__slide--active' : '');
-    slide.style.backgroundImage = `url('${img.IMAGE_URL}')`;
+    slide.style.backgroundImage    = `url('${img.IMAGE_URL}')`;
+    slide.style.backgroundSize     = 'cover';
+    slide.style.backgroundPosition = 'center';
     slide.setAttribute('aria-hidden', 'true');
     track.appendChild(slide);
 
@@ -28,23 +47,32 @@
     dot.className = 'hero__dot' + (i === 0 ? ' hero__dot--active' : '');
     dot.setAttribute('role', 'tab');
     dot.setAttribute('aria-label', `Slide ${i + 1}`);
-    dot.addEventListener('click', () => goTo(i));
     dotsWrap.appendChild(dot);
   });
 
-  let current = 0;
+  startSlideshow(track, dotsWrap);
+})();
+
+function startSlideshow(track, dotsWrap) {
   const slides = track.querySelectorAll('.hero__slide');
   const dots   = dotsWrap.querySelectorAll('.hero__dot');
+  if (slides.length < 2) return;
+
+  let current = 0;
 
   function goTo(index) {
     slides[current].classList.remove('hero__slide--active');
-    dots[current].classList.remove('hero__dot--active');
+    if (dots[current]) dots[current].classList.remove('hero__dot--active');
     current = (index + slides.length) % slides.length;
     slides[current].classList.add('hero__slide--active');
-    dots[current].classList.add('hero__dot--active');
+    if (dots[current]) dots[current].classList.add('hero__dot--active');
   }
 
-  const timer = setInterval(() => goTo(current + 1), 4000);
+  dots.forEach((dot, i) => dot.addEventListener('click', () => {
+    clearInterval(timer);
+    goTo(i);
+  }));
 
+  const timer = setInterval(() => goTo(current + 1), 4000);
   track.addEventListener('mouseenter', () => clearInterval(timer));
-})();
+}

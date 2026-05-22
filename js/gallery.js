@@ -1,35 +1,36 @@
 /* ═══════════════════════════════════════════════════════
    VCK COOL SPACE — Gallery + Lightbox
-   Fetches images from API, renders 3x2 grid.
-   "All photos >" button opens fullscreen lightbox.
+   API fields: IMAGE_URL, ALT_TH, ALT_EN, ORDER, STATUS
+   Renders 3×2 grid; "All Photos >" opens fullscreen lightbox.
 ═══════════════════════════════════════════════════════ */
 
 let allGalleryImages = [];
 
-function getCaption(item) {
+function galleryAlt(item) {
   const lang = (typeof getLang === 'function') ? getLang() : 'th';
-  return (lang === 'th' ? item.CAPTION_TH : item.CAPTION_EN) || item.CAPTION_TH || '';
+  return (lang === 'th' ? item.ALT_TH : item.ALT_EN)
+      || item.ALT_TH || item.ALT_EN || '';
 }
 
 function buildGalleryItem(item) {
   const el = document.createElement('div');
-  el.className = 'gallery__item';
+  el.className    = 'gallery__item';
+  el.style.cursor = 'pointer';
 
-  if (item.IMAGE_URL) {
+  if (item.IMAGE_URL && item.IMAGE_URL.trim()) {
     const img = document.createElement('img');
-    img.src = item.IMAGE_URL;
-    img.alt = getCaption(item);
+    img.src       = item.IMAGE_URL;
+    img.alt       = galleryAlt(item);
     img.className = 'img-cover';
-    img.loading = 'lazy';
+    img.loading   = 'lazy';
     el.appendChild(img);
   } else {
     const ph = document.createElement('div');
     ph.className = 'img-placeholder img-placeholder--gallery';
-    ph.innerHTML = `<span>${getCaption(item)}</span>`;
+    ph.innerHTML = `<span>${galleryAlt(item)}</span>`;
     el.appendChild(ph);
   }
 
-  el.style.cursor = 'pointer';
   el.addEventListener('click', () => openLightbox(allGalleryImages.indexOf(item)));
   return el;
 }
@@ -40,27 +41,28 @@ function buildPopupGrid(images) {
   const grid = popup.querySelector('.gallery__popup-grid');
   if (!grid) return;
   grid.innerHTML = '';
-  images.forEach((item, i) => {
+
+  images.forEach(item => {
     const el = document.createElement('div');
     el.className = 'gallery__popup-item';
-    if (item.IMAGE_URL) {
+
+    if (item.IMAGE_URL && item.IMAGE_URL.trim()) {
       const img = document.createElement('img');
-      img.src = item.IMAGE_URL;
-      img.alt = getCaption(item);
-      img.className = 'img-cover';
-      img.loading = 'lazy';
+      img.src       = item.IMAGE_URL;
+      img.alt       = galleryAlt(item);
+      img.loading   = 'lazy';
       el.appendChild(img);
     } else {
       const ph = document.createElement('div');
       ph.className = 'img-placeholder img-placeholder--popup';
-      ph.innerHTML = `<span>${getCaption(item)}</span>`;
+      ph.innerHTML = `<span>${galleryAlt(item)}</span>`;
       el.appendChild(ph);
     }
     grid.appendChild(el);
   });
 }
 
-function openLightbox(startIndex) {
+function openLightbox() {
   const popup = document.getElementById('gallery-popup');
   if (!popup) return;
   buildPopupGrid(allGalleryImages);
@@ -77,29 +79,39 @@ function closeLightbox() {
 
 async function initGallery() {
   const grid = document.querySelector('.gallery__grid');
-  if (!grid) return;
+  if (!grid) { console.warn('[gallery] .gallery__grid not found'); return; }
 
-  const images = await fetchGallery();
-  if (!images || images.length === 0) return;
+  console.log('[gallery] fetching images…');
+  let images = [];
+  try {
+    images = await fetchGallery();
+  } catch (err) {
+    console.error('[gallery] fetchGallery failed:', err);
+  }
+
+  console.log('[gallery] received:', images.length, images);
+  if (!images || images.length === 0) {
+    console.warn('[gallery] no images returned, keeping placeholders');
+    return;
+  }
 
   allGalleryImages = images;
 
   grid.innerHTML = '';
-  images.slice(0, 6).forEach(item => {
-    grid.appendChild(buildGalleryItem(item));
-  });
+  images.slice(0, 6).forEach(item => grid.appendChild(buildGalleryItem(item)));
 
+  // Wire lightbox close events
   const popup = document.getElementById('gallery-popup');
   if (popup) {
-    const overlay = popup.querySelector('.gallery__popup-overlay');
-    const closeBtn = popup.querySelector('.gallery__popup-close');
-    if (overlay) overlay.addEventListener('click', closeLightbox);
-    if (closeBtn) closeBtn.addEventListener('click', closeLightbox);
+    popup.querySelector('.gallery__popup-overlay')
+      ?.addEventListener('click', closeLightbox);
+    popup.querySelector('.gallery__popup-close')
+      ?.addEventListener('click', closeLightbox);
     popup.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
   }
 
-  const allBtn = document.querySelector('.gallery__all-btn');
-  if (allBtn) allBtn.addEventListener('click', () => openLightbox(0));
+  document.querySelector('.gallery__all-btn')
+    ?.addEventListener('click', openLightbox);
 }
 
 document.addEventListener('DOMContentLoaded', initGallery);

@@ -1,18 +1,35 @@
 /* ═══════════════════════════════════════════════════════
    VCK COOL SPACE — Events Renderer
-   Renders Today card + fixed MON→SUN week grid.
-   THU data comes from Weekly_THU; all others from Recurring_Events.
+   API field names: TH, EN, ZH_S, ZH_T, TIME_1, TIME_2,
+                    IMAGE_URL, DAY, STATUS, SLOT
+   Fixed display order: MON → TUE → WED → THU → FRI → SAT → SUN
 ═══════════════════════════════════════════════════════ */
 
-// Index 0=Sun, 1=Mon … 6=Sat — matches JS Date.getDay()
+// Index 0=Sun … 6=Sat, matches Date.getDay()
 const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const DAY_ABBR  = ['sun','mon','tue','wed','thu','fri','sat'];
 
-// Fixed display order: Mon(1) Tue(2) Wed(3) Thu(4) Fri(5) Sat(6) Sun(0)
+// Display order: Mon(1)→Tue(2)→Wed(3)→Thu(4)→Fri(5)→Sat(6)→Sun(0)
 const WEEK_ORDER = [1, 2, 3, 4, 5, 6, 0];
 
-/* Normalize the DAY field from the API sheet.
-   Handles: 'Monday' | 'MON' | 'mon' | 'monday' → 'Monday' */
+/* ── Field accessors ──────────────────────────────── */
+
+function evName(ev) {
+  const lang = (typeof getLang === 'function') ? getLang() : 'th';
+  if (lang === 'zh-s') return ev.ZH_S || ev.EN || ev.TH || '';
+  if (lang === 'zh-t') return ev.ZH_T || ev.EN || ev.TH || '';
+  if (lang === 'en')   return ev.EN   || ev.TH || '';
+  return ev.TH || ev.EN || '';
+}
+
+function evTime(ev) {
+  const t1 = (ev.TIME_1 || '').trim();
+  const t2 = (ev.TIME_2 || '').trim();
+  if (t1 && t2) return `${t1} – ${t2}`;
+  return t1 || t2;
+}
+
+/* Handles: 'Monday' | 'MON' | 'mon' | 'monday' → 'Monday' */
 function normalizeDayName(val) {
   if (!val) return '';
   const v = val.trim().toLowerCase();
@@ -25,47 +42,41 @@ function normalizeDayName(val) {
   return val;
 }
 
-/* Current Bangkok date/time — immune to UTC offset issues. */
+/* Current date/time in Bangkok (GMT+7) */
 function getThaiNow() {
   const bangkokStr = new Date().toLocaleString('en-CA', { timeZone: 'Asia/Bangkok' });
-  // en-CA gives 'YYYY-MM-DD, HH:MM:SS' — split on comma for date part
-  const dateStr = bangkokStr.split(',')[0].trim();
-  // Parse at noon local so DST/UTC conversions never shift the date
-  const d = new Date(dateStr + 'T12:00:00');
-  return {
-    dateStr,
-    dayName: DAY_NAMES[d.getDay()],
-    dayIdx:  d.getDay(),
-  };
+  const dateStr    = bangkokStr.split(',')[0].trim(); // 'YYYY-MM-DD'
+  const d          = new Date(dateStr + 'T12:00:00'); // noon — immune to UTC midnight shift
+  return { dateStr, dayName: DAY_NAMES[d.getDay()], dayIdx: d.getDay() };
 }
 
-/* ── DOM helpers ── */
+/* ── DOM helpers ────────────────────────────────── */
+
 function makePlaceholder(label) {
   const el = document.createElement('div');
   el.className = 'img-placeholder img-placeholder--card';
-  el.innerHTML = `<span>${label}</span>`;
+  el.innerHTML = `<span>${label || ''}</span>`;
   return el;
 }
 
 function makeImg(url, alt) {
   if (!url) return null;
   const img = document.createElement('img');
-  img.src     = url;
-  img.alt     = alt || '';
+  img.src       = url;
+  img.alt       = alt || '';
   img.className = 'img-cover';
   img.loading   = 'lazy';
   img.onerror   = function () { this.style.display = 'none'; };
   return img;
 }
 
-/* ── Today card ── */
+/* ── Today card ─────────────────────────────────── */
+
 function renderTodayCard(recurring, weeklyThu, todayInfo) {
   const section = document.querySelector('.events__today');
-  if (!section) {
-    console.warn('[events] .events__today element not found');
-    return;
-  }
-  console.log('[events] renderTodayCard | day:', todayInfo.dayName, '| date:', todayInfo.dateStr);
+  if (!section) { console.warn('[events] .events__today not found'); return; }
+
+  console.log('[events] today:', todayInfo.dayName, todayInfo.dateStr);
 
   let ev = null;
   if (todayInfo.dayName === 'Thursday') {
@@ -77,7 +88,7 @@ function renderTodayCard(recurring, weeklyThu, todayInfo) {
   }
 
   if (!ev) {
-    console.log('[events] no event for today — showing empty state');
+    console.log('[events] no event for today');
     const card = section.querySelector('.events__today-card');
     if (card) {
       card.innerHTML =
@@ -96,21 +107,22 @@ function renderTodayCard(recurring, weeklyThu, todayInfo) {
   const imgWrap = section.querySelector('.events__today-image');
 
   if (dayEl)  dayEl.textContent  = todayInfo.dayName;
-  if (nameEl) nameEl.textContent = ev.NAME_TH || ev.NAME_EN || '';
-  if (altEl)  altEl.textContent  = ev.NAME_EN || '';
+  if (nameEl) nameEl.textContent = ev.TH  || ev.EN || '';
+  if (altEl)  altEl.textContent  = ev.EN  || '';
   if (timeEl) {
     const icon = timeEl.querySelector('.events__time-icon');
     timeEl.textContent = '';
     if (icon) timeEl.appendChild(icon);
-    timeEl.appendChild(document.createTextNode(' ' + (ev.TIME || '')));
+    timeEl.appendChild(document.createTextNode(' ' + evTime(ev)));
   }
   if (imgWrap && ev.IMAGE_URL) {
-    const img = makeImg(ev.IMAGE_URL, ev.NAME_EN);
+    const img = makeImg(ev.IMAGE_URL, ev.EN);
     if (img) { imgWrap.innerHTML = ''; imgWrap.appendChild(img); }
   }
 }
 
-/* ── Week card builder ── */
+/* ── Week card builder ──────────────────────────── */
+
 function buildWeekCard(dayIdx, dayEvents, isThu, isToday) {
   const dayName = DAY_NAMES[dayIdx];
   const isRow2  = dayName === 'Friday' || dayName === 'Saturday' || dayName === 'Sunday';
@@ -125,7 +137,7 @@ function buildWeekCard(dayIdx, dayEvents, isThu, isToday) {
     isToday ? 'events__card--today' : '',
   ].filter(Boolean).join(' ');
 
-  // Day header label (data-i18n key e.g. "events.mon")
+  // Day header label (data-i18n key: "events.mon" etc.)
   const dayLabel = document.createElement('div');
   dayLabel.className = 'events__card-day';
   dayLabel.setAttribute('data-i18n', 'events.' + DAY_ABBR[dayIdx]);
@@ -141,20 +153,20 @@ function buildWeekCard(dayIdx, dayEvents, isThu, isToday) {
 
       const imgDiv = document.createElement('div');
       imgDiv.className = 'img-placeholder img-placeholder--mini';
-      const img = makeImg(ev.IMAGE_URL, ev.NAME_EN);
+      const img = makeImg(ev.IMAGE_URL, ev.EN);
       if (img) {
         imgDiv.appendChild(img);
       } else {
         const sp = document.createElement('span');
-        sp.textContent = ev.NAME_EN || '';
+        sp.textContent = ev.EN || '';
         imgDiv.appendChild(sp);
       }
 
       const info = document.createElement('div');
       info.className = 'events__mini-info';
       info.innerHTML =
-        `<p class="events__mini-name">${ev.NAME_TH || ev.NAME_EN || ''}</p>` +
-        `<p class="events__mini-time">${ev.TIME || ''}</p>`;
+        `<p class="events__mini-name">${evName(ev)}</p>` +
+        `<p class="events__mini-time">${evTime(ev)}</p>`;
 
       mini.appendChild(imgDiv);
       mini.appendChild(info);
@@ -166,32 +178,29 @@ function buildWeekCard(dayIdx, dayEvents, isThu, isToday) {
     const ev = dayEvents[0] || {};
     const imgDiv = document.createElement('div');
     imgDiv.className = 'events__card-img';
-    const img = makeImg(ev.IMAGE_URL, ev.NAME_EN);
-    imgDiv.appendChild(img || makePlaceholder(ev.NAME_EN || ''));
+    const img = makeImg(ev.IMAGE_URL, ev.EN);
+    imgDiv.appendChild(img || makePlaceholder(ev.EN || ''));
     card.appendChild(imgDiv);
 
     const body = document.createElement('div');
     body.className = 'events__card-body';
     body.innerHTML =
-      `<h4 class="events__card-name">${ev.NAME_TH || ev.NAME_EN || ''}</h4>` +
-      `<p class="events__card-name-en">${ev.NAME_EN || ''}</p>` +
-      `<p class="events__card-time">${ev.TIME || ''}</p>`;
+      `<h4 class="events__card-name">${evName(ev)}</h4>` +
+      `<p class="events__card-name-en">${ev.EN || ''}</p>` +
+      `<p class="events__card-time">${evTime(ev)}</p>`;
     card.appendChild(body);
   }
 
   return card;
 }
 
-/* ── Main init ── */
+/* ── Main init ──────────────────────────────────── */
+
 async function initEvents() {
   const week = document.querySelector('.events__week');
-  if (!week) {
-    console.error('[events] FATAL: .events__week not found in DOM');
-    return;
-  }
+  if (!week) { console.error('[events] FATAL: .events__week not found'); return; }
 
-  console.log('[events] fetching recurring + weeklyThu…');
-
+  console.log('[events] fetching data…');
   let recurring = [], weeklyThu = [];
   try {
     [recurring, weeklyThu] = await Promise.all([
@@ -199,22 +208,21 @@ async function initEvents() {
       fetchWeeklyThu(),
     ]);
   } catch (err) {
-    console.error('[events] fetch error:', err);
+    console.error('[events] Promise.all failed:', err);
   }
 
-  console.log('[events] recurring events received:', recurring.length, recurring);
-  console.log('[events] weekly THU received:', weeklyThu.length, weeklyThu);
+  console.log('[events] recurring:', recurring.length, recurring);
+  console.log('[events] weeklyThu:', weeklyThu.length, weeklyThu);
 
   const todayInfo = getThaiNow();
-  console.log('[events] Bangkok today:', todayInfo);
+  console.log('[events] Bangkok now:', todayInfo);
 
-  // Populate today card
   renderTodayCard(recurring, weeklyThu, todayInfo);
 
-  // Remove stale static cards; keep the h3 title
+  // Remove stale static cards, keep the h3 title intact
   week.querySelectorAll('.events__card').forEach(c => c.remove());
 
-  // Render fixed MON→TUE→WED→THU→FRI→SAT→SUN
+  // Always render in fixed MON → TUE → WED → THU → FRI → SAT → SUN order
   for (const dayIdx of WEEK_ORDER) {
     const dayName = DAY_NAMES[dayIdx];
     const isThu   = dayName === 'Thursday';
@@ -227,19 +235,18 @@ async function initEvents() {
     } else {
       dayEvents = recurring
         .filter(e => normalizeDayName(e.DAY) === dayName)
-        .sort((a, b) => (Number(a.SLOT) || 0) - (Number(b.SLOT) || 0));
+        .sort((a, b) => (Number(a.SLOT) || 0) - (Number(b.SLOT) || 0)
+                     || (a.TIME_1 || '').localeCompare(b.TIME_1 || ''));
     }
 
     if (!dayEvents.length) {
-      dayEvents = [{ NAME_TH: '—', NAME_EN: '—', TIME: '' }];
+      dayEvents = [{ TH: '—', EN: '—', TIME_1: '' }];
     }
 
-    console.log(`[events] ${dayName} (idx ${dayIdx})${isToday ? ' ← TODAY' : ''}:`, dayEvents);
-
+    console.log(`[events] ${dayName}${isToday ? ' ★TODAY' : ''}:`, dayEvents);
     week.appendChild(buildWeekCard(dayIdx, dayEvents, isThu, isToday));
   }
 
-  // Re-apply active language to the freshly rendered day labels
   if (typeof switchLanguage === 'function') switchLanguage(getLang());
 }
 
@@ -250,8 +257,13 @@ document.addEventListener('langchange', () => {
   const dict = (typeof translations !== 'undefined')
     ? (translations[lang] || translations.th)
     : {};
+  // Re-translate day labels on language switch
   document.querySelectorAll('.events__card-day[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     if (dict[key]) el.textContent = dict[key];
+  });
+  // Re-render event names in new language
+  document.querySelectorAll('.events__card-name, .events__mini-name').forEach(el => {
+    el.closest('.events__card');
   });
 });

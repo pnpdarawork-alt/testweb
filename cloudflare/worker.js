@@ -135,42 +135,59 @@ async function fetchSheet(sheetName, spreadsheetId, accessToken, useCache, ctx) 
   return data;
 }
 
+/* ── Request handler (called from outer try/catch) ── */
+
+async function handleRequest(request, env, ctx) {
+  const url          = new URL(request.url);
+  const path         = url.pathname;
+  const forceRefresh = url.searchParams.get('refresh') === 'true';
+
+  // CORS preflight
+  if (request.method === 'OPTIONS') {
+    return new Response(null, { status: 204, headers: CORS });
+  }
+  if (request.method !== 'GET') {
+    return json({ error: 'Method not allowed' }, 405);
+  }
+
+  const route = ROUTES[path];
+  if (!route) {
+    return json({ error: 'Not found', routes: Object.keys(ROUTES) }, 404);
+  }
+
+  const { GOOGLE_SERVICE_ACCOUNT_EMAIL, GOOGLE_PRIVATE_KEY, SPREADSHEET_ID } = env;
+  if (!GOOGLE_SERVICE_ACCOUNT_EMAIL || !GOOGLE_PRIVATE_KEY) {
+    return json({ error: 'Google service account secrets not configured' }, 500);
+  }
+  if (!SPREADSHEET_ID) {
+    return json({ error: 'SPREADSHEET_ID not configured' }, 500);
+  }
+
+  try {
+    const token = await getAccessToken(GOOGLE_SERVICE_ACCOUNT_EMAIL, GOOGLE_PRIVATE_KEY);
+    let data    = await fetchSheet(route.sheet, SPREADSHEET_ID, token, !forceRefresh, ctx);
+    data        = data.filter(route.filter);
+    if (route.sort) data = data.sort(route.sort);
+    return json(data, 200, { 'Cache-Control': 'public, max-age=86400' });
+  } catch (err) {
+    return json({ error: err.message }, 502);
+  }
+}
+
 /* ── Worker entry points ── */
 
 export default {
   async fetch(request, env, ctx) {
-    const url          = new URL(request.url);
-    const path         = url.pathname;
-    const forceRefresh = url.searchParams.get('refresh') === 'true';
-
-    if (request.method === 'OPTIONS') {
-      return new Response(null, { status: 204, headers: CORS });
-    }
-    if (request.method !== 'GET') {
-      return json({ error: 'Method not allowed' }, 405);
-    }
-
-    const route = ROUTES[path];
-    if (!route) {
-      return json({ error: 'Not found', routes: Object.keys(ROUTES) }, 404);
-    }
-
-    const { GOOGLE_SERVICE_ACCOUNT_EMAIL, GOOGLE_PRIVATE_KEY, SPREADSHEET_ID } = env;
-    if (!GOOGLE_SERVICE_ACCOUNT_EMAIL || !GOOGLE_PRIVATE_KEY) {
-      return json({ error: 'Google service account secrets not configured' }, 500);
-    }
-    if (!SPREADSHEET_ID) {
-      return json({ error: 'SPREADSHEET_ID not configured' }, 500);
-    }
-
+    /* Outer try/catch ensures CORS headers are present on ALL responses,
+       including unexpected runtime errors that would otherwise return a
+       Cloudflare-generated 500 with no CORS headers. */
     try {
-      const token = await getAccessToken(GOOGLE_SERVICE_ACCOUNT_EMAIL, GOOGLE_PRIVATE_KEY);
-      let data    = await fetchSheet(route.sheet, SPREADSHEET_ID, token, !forceRefresh, ctx);
-      data        = data.filter(route.filter);
-      if (route.sort) data = data.sort(route.sort);
-      return json(data, 200, { 'Cache-Control': 'public, max-age=86400' });
+      return await handleRequest(request, env, ctx);
     } catch (err) {
-      return json({ error: err.message }, 502);
+      return new Response(JSON.stringify({ error: `Unhandled: ${err.message}` }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json', ...CORS },
+      });
     }
   },
 

@@ -1,95 +1,60 @@
 /* ═══════════════════════════════════════════════════════
    VCK COOL SPACE — Static Fallback Data
-   Used when API is unavailable. Mirrors Google Sheets structure.
+   Field names match the actual Google Sheets columns:
+   Recurring_Events: TH, EN, ZH_S, ZH_T, TIME_1, TIME_2,
+                     IMAGE_URL, DAY, STATUS, SLOT
+   Gallery:          IMAGE_URL, ALT_TH, ALT_EN, ORDER, STATUS
+   Hero_Images:      IMAGE_URL, ORDER, STATUS
 ═══════════════════════════════════════════════════════ */
 
 const FALLBACK = {
 
   heroImages: [
-    { ORDER: 1, STATUS: 'active', IMAGE_URL: '', ALT_TH: 'VCK Cool Space ซาวน่า', ALT_EN: 'VCK Cool Space Sauna' },
-    { ORDER: 2, STATUS: 'active', IMAGE_URL: '', ALT_TH: 'ออนเซ็น และสระน้ำ', ALT_EN: 'Onsen & Pool' },
-    { ORDER: 3, STATUS: 'active', IMAGE_URL: '', ALT_TH: 'บรรยากาศยามค่ำคืน', ALT_EN: 'Evening Atmosphere' },
+    { ORDER: '1', STATUS: 'active', IMAGE_URL: '', ALT_TH: 'VCK Cool Space ซาวน่า', ALT_EN: 'VCK Cool Space Sauna' },
+    { ORDER: '2', STATUS: 'active', IMAGE_URL: '', ALT_TH: 'ออนเซ็น และสระน้ำ',     ALT_EN: 'Onsen & Pool' },
+    { ORDER: '3', STATUS: 'active', IMAGE_URL: '', ALT_TH: 'บรรยากาศยามค่ำคืน',     ALT_EN: 'Evening Atmosphere' },
   ],
 
   recurringEvents: [
-    { STATUS: 'active', DAY: 'Monday',    NAME_TH: 'วี-ไนท์',     NAME_EN: 'V-Night',      TIME: '20:00 – 21:00', IMAGE_URL: '' },
-    { STATUS: 'active', DAY: 'Tuesday',   NAME_TH: 'คืนหน้ากาก',  NAME_EN: 'Mask Night',   TIME: '20:00 – 21:00', IMAGE_URL: '' },
-    { STATUS: 'active', DAY: 'Wednesday', NAME_TH: 'โกมอน',        NAME_EN: 'Gomon Dark',   TIME: '20:00 – 21:00', IMAGE_URL: '' },
-    { STATUS: 'active', DAY: 'Friday',    NAME_TH: 'ชิงโกะ',       NAME_EN: 'Chinko',       TIME: '19:00 – 19:45', IMAGE_URL: '', SLOT: 1 },
-    { STATUS: 'active', DAY: 'Friday',    NAME_TH: 'ยูนิฟอร์ม',   NAME_EN: 'Uniform',      TIME: '20:00 – 21:00', IMAGE_URL: '', SLOT: 2 },
-    { STATUS: 'active', DAY: 'Saturday',  NAME_TH: 'ชิงโกะ',       NAME_EN: 'Chinko',       TIME: '19:00 – 19:45', IMAGE_URL: '', SLOT: 1 },
-    { STATUS: 'active', DAY: 'Saturday',  NAME_TH: 'รูฟท็อป',      NAME_EN: 'Rooftop Orgy', TIME: '20:00 – 21:00', IMAGE_URL: '', SLOT: 2 },
-    { STATUS: 'active', DAY: 'Sunday',    NAME_TH: 'ชิงโกะ',       NAME_EN: 'Chinko',       TIME: '19:00 – 19:45', IMAGE_URL: '', SLOT: 1 },
-    { STATUS: 'active', DAY: 'Sunday',    NAME_TH: 'พูลปาร์ตี้',   NAME_EN: 'Pool Party',   TIME: '20:00 – 21:00', IMAGE_URL: '', SLOT: 2 },
+    { STATUS: 'active', DAY: 'Monday',    TH: 'วี-ไนท์',     EN: 'V-Night',       ZH_S: 'V之夜',   ZH_T: 'V之夜',   TIME_1: '20:00', TIME_2: '21:00', IMAGE_URL: '', SLOT: '1' },
+    { STATUS: 'active', DAY: 'Tuesday',   TH: 'คืนหน้ากาก',  EN: 'Mask Night',    ZH_S: '面具之夜', ZH_T: '面具之夜', TIME_1: '20:00', TIME_2: '21:00', IMAGE_URL: '', SLOT: '1' },
+    { STATUS: 'active', DAY: 'Wednesday', TH: 'โกมอน',        EN: 'Gomon Dark',    ZH_S: '暗夜幻影', ZH_T: '暗夜幻影', TIME_1: '20:00', TIME_2: '21:00', IMAGE_URL: '', SLOT: '1' },
+    { STATUS: 'active', DAY: 'Friday',    TH: 'ชิงโกะ',       EN: 'Chinko',        ZH_S: 'Chinko',   ZH_T: 'Chinko',   TIME_1: '19:00', TIME_2: '19:45', IMAGE_URL: '', SLOT: '1' },
+    { STATUS: 'active', DAY: 'Friday',    TH: 'ยูนิฟอร์ม',   EN: 'Uniform',       ZH_S: '制服派对', ZH_T: '制服派對', TIME_1: '20:00', TIME_2: '21:00', IMAGE_URL: '', SLOT: '2' },
+    { STATUS: 'active', DAY: 'Saturday',  TH: 'ชิงโกะ',       EN: 'Chinko',        ZH_S: 'Chinko',   ZH_T: 'Chinko',   TIME_1: '19:00', TIME_2: '19:45', IMAGE_URL: '', SLOT: '1' },
+    { STATUS: 'active', DAY: 'Saturday',  TH: 'รูฟท็อป',      EN: 'Rooftop Orgy',  ZH_S: '屋顶派对', ZH_T: '屋頂派對', TIME_1: '20:00', TIME_2: '21:00', IMAGE_URL: '', SLOT: '2' },
+    { STATUS: 'active', DAY: 'Sunday',    TH: 'ชิงโกะ',       EN: 'Chinko',        ZH_S: 'Chinko',   ZH_T: 'Chinko',   TIME_1: '19:00', TIME_2: '19:45', IMAGE_URL: '', SLOT: '1' },
+    { STATUS: 'active', DAY: 'Sunday',    TH: 'พูลปาร์ตี้',   EN: 'Pool Party',    ZH_S: '泳池派对', ZH_T: '泳池派對', TIME_1: '20:00', TIME_2: '21:00', IMAGE_URL: '', SLOT: '2' },
   ],
 
   weeklyThu: [
     {
-      STATUS: 'active',
-      DATE: '',
-      NAME_TH: 'เอ็กซ์โมเดล',
-      NAME_EN: 'X Model',
-      TIME: '20:00 – 21:00',
-      DESC_TH: 'อีเวนต์พิเศษประจำสัปดาห์',
-      DESC_EN: 'Weekly special event',
+      STATUS:  'active',
+      DATE:    '',
+      TH:      'เอ็กซ์โมเดล',
+      EN:      'X Model',
+      ZH_S:    'X模特',
+      ZH_T:    'X模特',
+      TIME_1:  '20:00',
+      TIME_2:  '21:00',
       IMAGE_URL: '',
     },
   ],
 
   promotion: [
-    {
-      ORDER: 1,
-      STATUS: 'active',
-      CODE: 'VCK-VAL',
-      NAME_TH: 'Value Package',
-      NAME_EN: 'Value Package',
-      DESC_TH: 'แพ็กเกจคุ้มค่าสำหรับการใช้บริการครบครัน ซาวน่า ออนเซ็น สระน้ำ ฟิตเนส',
-      DESC_EN: 'All-inclusive package for a complete experience: sauna, onsen, pool & gym.',
-      DESC_ZHS: '一票畅享所有设施：桑拿、温泉、泳池和健身房。',
-      DESC_ZHT: '一票暢享所有設施：桑拿、溫泉、泳池和健身房。',
-    },
-    {
-      ORDER: 2,
-      STATUS: 'active',
-      CODE: 'VCK-VCL',
-      NAME_TH: 'Vclub7 Membership',
-      NAME_EN: 'Vclub7 Membership',
-      DESC_TH: 'สมาชิก Vclub7 รับสิทธิพิเศษตลอดปี ส่วนลดและสิทธิ์เข้าใช้พิเศษ',
-      DESC_EN: 'Vclub7 members enjoy exclusive year-round privileges, discounts and priority access.',
-      DESC_ZHS: 'Vclub7 会员全年享受专属优惠与优先使用权。',
-      DESC_ZHT: 'Vclub7 會員全年享受專屬優惠與優先使用權。',
-    },
-    {
-      ORDER: 3,
-      STATUS: 'active',
-      CODE: 'VCK-DAY',
-      NAME_TH: 'One Day Pass',
-      NAME_EN: 'One Day Pass',
-      DESC_TH: 'เข้าใช้งานได้ทั้งวัน ไม่จำกัดรอบ เพลิดเพลินกับทุกสิ่งอำนวยความสะดวก',
-      DESC_EN: 'Unlimited all-day access with no session limits. Enjoy every facility.',
-      DESC_ZHS: '全天无限次使用，尽享所有设施。',
-      DESC_ZHT: '全天無限次使用，盡享所有設施。',
-    },
-    {
-      ORDER: 4,
-      STATUS: 'active',
-      CODE: 'VCK-STU',
-      NAME_TH: 'โปรนักศึกษา',
-      NAME_EN: 'Student Special',
-      DESC_TH: 'ส่วนลดพิเศษสำหรับนักศึกษา แสดงบัตรนักศึกษาเพื่อรับสิทธิ์',
-      DESC_EN: 'Special discount for students. Present your student ID to redeem.',
-      DESC_ZHS: '学生专属折扣，出示学生证即可享受。',
-      DESC_ZHT: '學生專屬折扣，出示學生證即可享受。',
-    },
+    { ORDER: '1', STATUS: 'active', CODE: 'VCK-VAL', TH: 'Value Package',   EN: 'Value Package',    DESC_TH: 'แพ็กเกจคุ้มค่าสำหรับการใช้บริการครบครัน', DESC_EN: 'All-inclusive package',           DESC_ZHS: '超值套餐', DESC_ZHT: '超值套餐' },
+    { ORDER: '2', STATUS: 'active', CODE: 'VCK-VCL', TH: 'Vclub7 Membership', EN: 'Vclub7 Membership', DESC_TH: 'สมาชิก Vclub7 รับสิทธิพิเศษตลอดปี',     DESC_EN: 'Year-round member privileges',     DESC_ZHS: 'Vclub7会员', DESC_ZHT: 'Vclub7會員' },
+    { ORDER: '3', STATUS: 'active', CODE: 'VCK-DAY', TH: 'One Day Pass',    EN: 'One Day Pass',     DESC_TH: 'เข้าใช้งานได้ทั้งวัน ไม่จำกัดรอบ',        DESC_EN: 'Unlimited all-day access',         DESC_ZHS: '全日通',    DESC_ZHT: '全日通' },
+    { ORDER: '4', STATUS: 'active', CODE: 'VCK-STU', TH: 'โปรนักศึกษา',    EN: 'Student Special',  DESC_TH: 'ส่วนลดพิเศษสำหรับนักศึกษา',               DESC_EN: 'Special discount for students',    DESC_ZHS: '学生优惠',  DESC_ZHT: '學生優惠' },
   ],
 
   gallery: [
-    { ORDER: 1, STATUS: 'active', IMAGE_URL: '', CAPTION_TH: 'ซาวน่า', CAPTION_EN: 'Sauna' },
-    { ORDER: 2, STATUS: 'active', IMAGE_URL: '', CAPTION_TH: 'ออนเซ็น', CAPTION_EN: 'Onsen' },
-    { ORDER: 3, STATUS: 'active', IMAGE_URL: '', CAPTION_TH: 'สระน้ำ', CAPTION_EN: 'Pool' },
-    { ORDER: 4, STATUS: 'active', IMAGE_URL: '', CAPTION_TH: 'ฟิตเนส', CAPTION_EN: 'Gym' },
-    { ORDER: 5, STATUS: 'active', IMAGE_URL: '', CAPTION_TH: 'ห้องพัก', CAPTION_EN: 'Room' },
-    { ORDER: 6, STATUS: 'active', IMAGE_URL: '', CAPTION_TH: 'คาเฟ่', CAPTION_EN: 'Café' },
+    { ORDER: '1', STATUS: 'active', IMAGE_URL: '', ALT_TH: 'ซาวน่า',   ALT_EN: 'Sauna' },
+    { ORDER: '2', STATUS: 'active', IMAGE_URL: '', ALT_TH: 'ออนเซ็น',  ALT_EN: 'Onsen' },
+    { ORDER: '3', STATUS: 'active', IMAGE_URL: '', ALT_TH: 'สระน้ำ',   ALT_EN: 'Pool' },
+    { ORDER: '4', STATUS: 'active', IMAGE_URL: '', ALT_TH: 'ฟิตเนส',   ALT_EN: 'Gym' },
+    { ORDER: '5', STATUS: 'active', IMAGE_URL: '', ALT_TH: 'ห้องพัก',  ALT_EN: 'Room' },
+    { ORDER: '6', STATUS: 'active', IMAGE_URL: '', ALT_TH: 'คาเฟ่',    ALT_EN: 'Café' },
   ],
 
 };

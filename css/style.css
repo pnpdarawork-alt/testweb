@@ -601,23 +601,27 @@ button {
 }
 
 /* ── This Week Grid ──
-   Row 1: MON TUE WED THU  → 4 equal columns (each span 3 of 12)
-   Row 2: FRI SAT SUN      → 3 wider columns (each span 4 of 12)
+   .events__week is the CSS Grid container.
+   Cards are direct children — no extra wrapper needed.
+   Row 1: MON TUE WED THU  → span 3 each  (4×3 = 12)
+   Row 2: FRI SAT SUN      → span 4 each  (3×4 = 12)
 ────────────────────────── */
+.events__week {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1rem;
+}
+
+/* Title spans the full 12 columns */
 .events__week-title {
+  grid-column: 1 / -1;
   font-family: var(--font-serif);
   font-size: 28px;
   font-weight: 600;
   color: var(--dark);
-  margin-bottom: 32px;
+  margin-bottom: 0;
   padding-bottom: 16px;
   border-bottom: 1px solid var(--border);
-}
-
-.events__grid {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 14px;
 }
 
 /* Row 1 — 4 cards × 3 col-spans = 12 */
@@ -646,6 +650,11 @@ button {
 .events__card--thu {
   border-color: var(--gold-light);
   background: #FDFAF4;
+}
+
+.events__card--today {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px rgba(201,169,110,0.18);
 }
 
 .events__card-day {

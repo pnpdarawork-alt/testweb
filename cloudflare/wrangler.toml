@@ -1,0 +1,12 @@
+name            = "vck-data"
+main            = "worker.js"
+compatibility_date = "2026-01-01"
+
+[triggers]
+crons = ["0 17 * * *"]
+
+[vars]
+SPREADSHEET_ID = "1irZdpSaHsQ_-e4UbMF_cgNmjkxP0ZnHBw_A11oPZUAM"
+
+# Add your Google API key as a secret (never hardcode):
+# wrangler secret put GOOGLE_API_KEY

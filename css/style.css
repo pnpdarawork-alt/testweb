@@ -384,6 +384,10 @@ button {
   transition: opacity 1s ease;
 }
 
+.hero__slide--active {
+  opacity: 1;
+}
+
 .hero__slide--1 {
   opacity: 1;
   background-color: #1A1208;
@@ -596,7 +600,10 @@ button {
   font-size: 16px;
 }
 
-/* This Week */
+/* ── This Week Grid ──
+   Row 1: MON TUE WED THU  → 4 equal columns (each span 3 of 12)
+   Row 2: FRI SAT SUN      → 3 wider columns (each span 4 of 12)
+────────────────────────── */
 .events__week-title {
   font-family: var(--font-serif);
   font-size: 28px;
@@ -609,8 +616,18 @@ button {
 
 .events__grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 14px;
+}
+
+/* Row 1 — 4 cards × 3 col-spans = 12 */
+.events__card--row1 {
+  grid-column: span 3;
+}
+
+/* Row 2 — 3 cards × 4 col-spans = 12 */
+.events__card--row2 {
+  grid-column: span 4;
 }
 
 .events__card {
@@ -618,6 +635,8 @@ button {
   border-radius: var(--radius-lg);
   overflow: hidden;
   transition: box-shadow var(--transition);
+  display: flex;
+  flex-direction: column;
 }
 
 .events__card:hover {
@@ -648,6 +667,7 @@ button {
 
 .events__card-img {
   min-height: 140px;
+  flex: 1;
 }
 
 .events__card-body {
@@ -676,16 +696,17 @@ button {
   letter-spacing: 0.05em;
 }
 
-/* Multi-event cards (FRI/SAT/SUN) */
+/* Multi-event cards (FRI/SAT/SUN): no image, show stacked mini events */
 .events__card--multi .events__card-img {
   display: none;
 }
 
 .events__card-multi-row {
-  padding: 12px;
+  padding: 14px 12px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
+  flex: 1;
 }
 
 .events__mini-event {
@@ -716,7 +737,7 @@ button {
 }
 
 /* ───────────────────────────────
-   9. PROMOTION SECTION
+   9. PROMOTION SECTION — Ticket Style
 ─────────────────────────────── */
 .promotion {
   background: var(--bg-dark);
@@ -740,38 +761,45 @@ button {
   gap: 24px;
 }
 
-.promo__card {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(201,169,110,0.2);
+/* ── Ticket card ── */
+.ticket {
+  position: relative;
+  background: linear-gradient(160deg, #1E1B12 0%, #131008 100%);
+  border: 1px solid rgba(201,169,110,0.3);
   border-radius: var(--radius-lg);
-  padding: 40px 36px;
-  transition: all var(--transition);
+  overflow: visible;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
 }
 
-.promo__card:hover {
-  background: rgba(201,169,110,0.07);
-  border-color: rgba(201,169,110,0.5);
-  transform: translateY(-4px);
+.ticket:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 56px rgba(0,0,0,0.5);
+  border-color: rgba(201,169,110,0.6);
 }
 
-.promo__card--featured {
-  background: rgba(201,169,110,0.1);
+.ticket--featured {
+  background: linear-gradient(160deg, #221C0C 0%, #181200 100%);
   border-color: var(--gold);
+  box-shadow: 0 0 0 1px rgba(201,169,110,0.15);
 }
 
-.promo__card--featured:hover {
-  background: rgba(201,169,110,0.18);
+/* Body section */
+.ticket__body {
+  padding: 36px 32px 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
-.promo__card-icon {
+.ticket__icon {
   font-size: 32px;
   line-height: 1;
 }
 
-.promo__card-title {
+.ticket__name {
   font-family: var(--font-serif);
   font-size: 22px;
   font-weight: 600;
@@ -779,12 +807,62 @@ button {
   line-height: 1.3;
 }
 
-.promo__card-desc {
+.ticket__desc {
   font-size: 14px;
   font-weight: 300;
-  color: rgba(255,255,255,0.6);
-  line-height: 1.7;
+  color: rgba(255,255,255,0.58);
+  line-height: 1.75;
   flex: 1;
+}
+
+/* ── Perforated tear line ── */
+.ticket__perf {
+  position: relative;
+  height: 0;
+  margin: 0 0 0 0;
+  border-top: 2px dashed rgba(201,169,110,0.25);
+  overflow: visible;
+}
+
+/* Semicircle notches cut into the sides */
+.ticket__notch {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--bg-dark);
+  border: 1px solid rgba(201,169,110,0.2);
+}
+
+.ticket__notch--l {
+  left:  -11px;
+}
+
+.ticket__notch--r {
+  right: -11px;
+}
+
+/* Stub section (below the tear) */
+.ticket__stub {
+  padding: 18px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: rgba(201,169,110,0.04);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+.ticket__code {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: rgba(201,169,110,0.5);
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 /* ───────────────────────────────
@@ -855,7 +933,7 @@ button {
 }
 
 /* ───────────────────────────────
-   11. GALLERY SECTION
+   11. GALLERY SECTION — 3×2 Equal Grid
 ─────────────────────────────── */
 .gallery {
   background: var(--bg-warm);
@@ -864,7 +942,7 @@ button {
 .gallery__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: auto auto;
+  grid-template-rows: repeat(2, 280px);
   gap: 16px;
 }
 
@@ -873,19 +951,23 @@ button {
   border-radius: var(--radius);
   cursor: pointer;
   transition: transform var(--transition);
+  height: 100%;
 }
 
 .gallery__item:hover {
   transform: scale(1.02);
 }
 
-.gallery__item--large {
-  grid-column: span 1;
-  grid-row: span 2;
+.gallery__item .img-placeholder--gallery {
+  min-height: unset;
+  height: 100%;
 }
 
-.gallery__item--large .img-placeholder--gallery {
-  min-height: 536px;
+.gallery__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .gallery__footer {
@@ -898,7 +980,7 @@ button {
   letter-spacing: 0.1em;
 }
 
-/* Gallery Popup */
+/* Gallery Lightbox Popup */
 .gallery__popup {
   display: none;
   position: fixed;
@@ -913,7 +995,7 @@ button {
 .gallery__popup-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.9);
+  background: rgba(0,0,0,0.92);
 }
 
 .gallery__popup-inner {
@@ -935,6 +1017,8 @@ button {
   padding: 8px;
   line-height: 1;
   z-index: 1;
+  background: var(--bg-dark);
+  border-radius: var(--radius);
 }
 
 .gallery__popup-grid {
@@ -942,6 +1026,20 @@ button {
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
   margin-top: 16px;
+  clear: both;
+}
+
+.gallery__popup-item {
+  border-radius: var(--radius);
+  overflow: hidden;
+  min-height: 220px;
+}
+
+.gallery__popup-item img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
 }
 
 /* ───────────────────────────────

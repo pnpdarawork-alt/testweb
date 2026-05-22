@@ -28,7 +28,7 @@
         <span class="navbar__logo-text">Cool Space</span>
       </a>
 
-      <!-- Hamburger toggle (CSS-only, no JS needed for Phase 1) -->
+      <!-- Hamburger toggle -->
       <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-hidden="true" />
       <label for="nav-toggle" class="nav-hamburger" aria-label="Toggle navigation">
         <span></span>
@@ -39,11 +39,11 @@
       <!-- Nav links + language + CTA -->
       <nav class="navbar__nav" role="navigation" aria-label="Main navigation">
         <ul class="navbar__links">
-          <li><a href="#events" class="navbar__link" data-i18n="nav.events">Events</a></li>
+          <li><a href="#events"    class="navbar__link" data-i18n="nav.events">Events</a></li>
           <li><a href="#promotion" class="navbar__link" data-i18n="nav.promotion">Promotion</a></li>
-          <li><a href="#services" class="navbar__link" data-i18n="nav.services">Services</a></li>
-          <li><a href="#gallery" class="navbar__link" data-i18n="nav.gallery">Gallery</a></li>
-          <li><a href="#contact" class="navbar__link" data-i18n="nav.contact">Contact</a></li>
+          <li><a href="#services"  class="navbar__link" data-i18n="nav.services">Services</a></li>
+          <li><a href="#gallery"   class="navbar__link" data-i18n="nav.gallery">Gallery</a></li>
+          <li><a href="#contact"   class="navbar__link" data-i18n="nav.contact">Contact</a></li>
         </ul>
 
         <!-- Language Switcher -->
@@ -68,7 +68,7 @@
   ═══════════════════════════════════════════ -->
   <section id="hero" class="hero">
 
-    <!-- Slide track (Phase 3: JS will animate) -->
+    <!-- Slide track (hero.js animates when images available) -->
     <div class="hero__slides" aria-hidden="true">
       <div class="hero__slide hero__slide--1"></div>
       <div class="hero__slide hero__slide--2"></div>
@@ -125,10 +125,6 @@
         <div class="events__today-badge" data-i18n="events.today">Today</div>
         <div class="events__today-card">
           <div class="events__today-image">
-            <img src="images/placeholder-event.jpg"
-                 alt="Today's Event"
-                 class="img-cover"
-                 onerror="this.style.display='none'" />
             <div class="img-placeholder img-placeholder--event">
               <span>Event Photo</span>
             </div>
@@ -147,19 +143,17 @@
         </div>
       </div>
 
-      <!-- This Week -->
+      <!-- This Week — CSS Grid: Row 1 = 4 cards (MON–THU), Row 2 = 3 wider cards (FRI–SUN) -->
       <div class="events__week">
         <h3 class="events__week-title" data-i18n="events.thisWeek">This Week's Events</h3>
 
         <div class="events__grid">
 
-          <!-- MON -->
-          <div class="events__card">
+          <!-- Row 1: MON, TUE, WED, THU (4 equal cards) -->
+          <div class="events__card events__card--row1">
             <div class="events__card-day" data-i18n="events.mon">MON</div>
             <div class="events__card-img">
-              <div class="img-placeholder img-placeholder--card">
-                <span>V-Night</span>
-              </div>
+              <div class="img-placeholder img-placeholder--card"><span>V-Night</span></div>
             </div>
             <div class="events__card-body">
               <h4 class="events__card-name" data-i18n="events.vnight">วี-ไนท์</h4>
@@ -168,13 +162,10 @@
             </div>
           </div>
 
-          <!-- TUE -->
-          <div class="events__card">
+          <div class="events__card events__card--row1">
             <div class="events__card-day" data-i18n="events.tue">TUE</div>
             <div class="events__card-img">
-              <div class="img-placeholder img-placeholder--card">
-                <span>Mask Night</span>
-              </div>
+              <div class="img-placeholder img-placeholder--card"><span>Mask Night</span></div>
             </div>
             <div class="events__card-body">
               <h4 class="events__card-name" data-i18n="events.mask">คืนหน้ากาก</h4>
@@ -183,13 +174,10 @@
             </div>
           </div>
 
-          <!-- WED -->
-          <div class="events__card">
+          <div class="events__card events__card--row1">
             <div class="events__card-day" data-i18n="events.wed">WED</div>
             <div class="events__card-img">
-              <div class="img-placeholder img-placeholder--card">
-                <span>Gomon Dark</span>
-              </div>
+              <div class="img-placeholder img-placeholder--card"><span>Gomon Dark</span></div>
             </div>
             <div class="events__card-body">
               <h4 class="events__card-name" data-i18n="events.gomon">โกมอน</h4>
@@ -198,13 +186,10 @@
             </div>
           </div>
 
-          <!-- THU (dynamic) -->
-          <div class="events__card events__card--thu">
+          <div class="events__card events__card--row1 events__card--thu">
             <div class="events__card-day" data-i18n="events.thu">THU</div>
             <div class="events__card-img">
-              <div class="img-placeholder img-placeholder--card img-placeholder--thu">
-                <span>X Model</span>
-              </div>
+              <div class="img-placeholder img-placeholder--card img-placeholder--thu"><span>X Model</span></div>
             </div>
             <div class="events__card-body">
               <h4 class="events__card-name" data-i18n="events.thuName">เอ็กซ์โมเดล</h4>
@@ -213,23 +198,19 @@
             </div>
           </div>
 
-          <!-- FRI -->
-          <div class="events__card events__card--multi">
+          <!-- Row 2: FRI, SAT, SUN (3 wider cards, 2 events stacked inside each) -->
+          <div class="events__card events__card--row2 events__card--multi">
             <div class="events__card-day" data-i18n="events.fri">FRI</div>
             <div class="events__card-multi-row">
               <div class="events__mini-event">
-                <div class="img-placeholder img-placeholder--mini">
-                  <span>Chinko</span>
-                </div>
+                <div class="img-placeholder img-placeholder--mini"><span>Chinko</span></div>
                 <div class="events__mini-info">
                   <p class="events__mini-name" data-i18n="events.chinko">ชิงโกะ</p>
                   <p class="events__mini-time">19:00 – 19:45</p>
                 </div>
               </div>
               <div class="events__mini-event">
-                <div class="img-placeholder img-placeholder--mini">
-                  <span>Uniform</span>
-                </div>
+                <div class="img-placeholder img-placeholder--mini"><span>Uniform</span></div>
                 <div class="events__mini-info">
                   <p class="events__mini-name" data-i18n="events.uniform">ยูนิฟอร์ม</p>
                   <p class="events__mini-time">20:00 – 21:00</p>
@@ -238,23 +219,18 @@
             </div>
           </div>
 
-          <!-- SAT -->
-          <div class="events__card events__card--multi">
+          <div class="events__card events__card--row2 events__card--multi">
             <div class="events__card-day" data-i18n="events.sat">SAT</div>
             <div class="events__card-multi-row">
               <div class="events__mini-event">
-                <div class="img-placeholder img-placeholder--mini">
-                  <span>Chinko</span>
-                </div>
+                <div class="img-placeholder img-placeholder--mini"><span>Chinko</span></div>
                 <div class="events__mini-info">
                   <p class="events__mini-name" data-i18n="events.chinko">ชิงโกะ</p>
                   <p class="events__mini-time">19:00 – 19:45</p>
                 </div>
               </div>
               <div class="events__mini-event">
-                <div class="img-placeholder img-placeholder--mini">
-                  <span>Rooftop Orgy</span>
-                </div>
+                <div class="img-placeholder img-placeholder--mini"><span>Rooftop Orgy</span></div>
                 <div class="events__mini-info">
                   <p class="events__mini-name" data-i18n="events.rooftop">รูฟท็อป</p>
                   <p class="events__mini-time">20:00 – 21:00</p>
@@ -263,23 +239,18 @@
             </div>
           </div>
 
-          <!-- SUN -->
-          <div class="events__card events__card--multi">
+          <div class="events__card events__card--row2 events__card--multi">
             <div class="events__card-day" data-i18n="events.sun">SUN</div>
             <div class="events__card-multi-row">
               <div class="events__mini-event">
-                <div class="img-placeholder img-placeholder--mini">
-                  <span>Chinko</span>
-                </div>
+                <div class="img-placeholder img-placeholder--mini"><span>Chinko</span></div>
                 <div class="events__mini-info">
                   <p class="events__mini-name" data-i18n="events.chinko">ชิงโกะ</p>
                   <p class="events__mini-time">19:00 – 19:45</p>
                 </div>
               </div>
               <div class="events__mini-event">
-                <div class="img-placeholder img-placeholder--mini">
-                  <span>Pool Party</span>
-                </div>
+                <div class="img-placeholder img-placeholder--mini"><span>Pool Party</span></div>
                 <div class="events__mini-info">
                   <p class="events__mini-name" data-i18n="events.pool">พูลปาร์ตี้</p>
                   <p class="events__mini-time">20:00 – 21:00</p>
@@ -296,7 +267,7 @@
 
 
   <!-- ═══════════════════════════════════════════
-       PROMOTION SECTION
+       PROMOTION SECTION — Ticket Style
   ═══════════════════════════════════════════ -->
   <section id="promotion" class="section promotion">
     <div class="container">
@@ -310,55 +281,83 @@
       <div class="promo__grid">
 
         <!-- Value Package -->
-        <div class="promo__card">
-          <div class="promo__card-icon" aria-hidden="true">🎫</div>
-          <h3 class="promo__card-title">
-            <span data-i18n="promo.value">Value Package</span>
-          </h3>
-          <p class="promo__card-desc" data-i18n="promo.valueDesc">
-            แพ็กเกจคุ้มค่าสำหรับการใช้บริการครบครัน
-          </p>
-          <a href="https://line.me/vckcoolspace" target="_blank" rel="noopener noreferrer"
-             class="btn btn--outline-gold btn--sm" data-i18n="cta.inquire">สอบถามเพิ่มเติม</a>
+        <div class="ticket">
+          <div class="ticket__body">
+            <div class="ticket__icon" aria-hidden="true">🎫</div>
+            <h3 class="ticket__name" data-i18n="promo.value">Value Package</h3>
+            <p class="ticket__desc" data-i18n="promo.valueDesc">
+              แพ็กเกจคุ้มค่าสำหรับการใช้บริการครบครัน ซาวน่า ออนเซ็น สระน้ำ ฟิตเนส
+            </p>
+          </div>
+          <div class="ticket__perf">
+            <span class="ticket__notch ticket__notch--l"></span>
+            <span class="ticket__notch ticket__notch--r"></span>
+          </div>
+          <div class="ticket__stub">
+            <span class="ticket__code">VCK-VAL</span>
+            <a href="https://line.me/vckcoolspace" target="_blank" rel="noopener noreferrer"
+               class="btn btn--outline-gold btn--sm" data-i18n="cta.inquire">สอบถามเพิ่มเติม</a>
+          </div>
         </div>
 
         <!-- Vclub7 Membership -->
-        <div class="promo__card promo__card--featured">
-          <div class="promo__card-icon" aria-hidden="true">🧡</div>
-          <h3 class="promo__card-title">
-            <span data-i18n="promo.vclub">Vclub7 Membership</span>
-          </h3>
-          <p class="promo__card-desc" data-i18n="promo.vclubDesc">
-            สมาชิก Vclub7 รับสิทธิพิเศษตลอดปี
-          </p>
-          <a href="https://line.me/vckcoolspace" target="_blank" rel="noopener noreferrer"
-             class="btn btn--gold btn--sm" data-i18n="cta.inquire">สอบถามเพิ่มเติม</a>
+        <div class="ticket ticket--featured">
+          <div class="ticket__body">
+            <div class="ticket__icon" aria-hidden="true">🧡</div>
+            <h3 class="ticket__name" data-i18n="promo.vclub">Vclub7 Membership</h3>
+            <p class="ticket__desc" data-i18n="promo.vclubDesc">
+              สมาชิก Vclub7 รับสิทธิพิเศษตลอดปี ส่วนลดและสิทธิ์เข้าใช้พิเศษ
+            </p>
+          </div>
+          <div class="ticket__perf">
+            <span class="ticket__notch ticket__notch--l"></span>
+            <span class="ticket__notch ticket__notch--r"></span>
+          </div>
+          <div class="ticket__stub">
+            <span class="ticket__code">VCK-VCL</span>
+            <a href="https://line.me/vckcoolspace" target="_blank" rel="noopener noreferrer"
+               class="btn btn--gold btn--sm" data-i18n="cta.inquire">สอบถามเพิ่มเติม</a>
+          </div>
         </div>
 
         <!-- One Day Pass -->
-        <div class="promo__card">
-          <div class="promo__card-icon" aria-hidden="true">🎟️</div>
-          <h3 class="promo__card-title">
-            <span data-i18n="promo.daypass">One Day Pass</span>
-          </h3>
-          <p class="promo__card-desc" data-i18n="promo.daypassDesc">
-            เข้าใช้งานได้ทั้งวัน ไม่จำกัดรอบ
-          </p>
-          <a href="https://line.me/vckcoolspace" target="_blank" rel="noopener noreferrer"
-             class="btn btn--outline-gold btn--sm" data-i18n="cta.inquire">สอบถามเพิ่มเติม</a>
+        <div class="ticket">
+          <div class="ticket__body">
+            <div class="ticket__icon" aria-hidden="true">🎟️</div>
+            <h3 class="ticket__name" data-i18n="promo.daypass">One Day Pass</h3>
+            <p class="ticket__desc" data-i18n="promo.daypassDesc">
+              เข้าใช้งานได้ทั้งวัน ไม่จำกัดรอบ เพลิดเพลินกับทุกสิ่งอำนวยความสะดวก
+            </p>
+          </div>
+          <div class="ticket__perf">
+            <span class="ticket__notch ticket__notch--l"></span>
+            <span class="ticket__notch ticket__notch--r"></span>
+          </div>
+          <div class="ticket__stub">
+            <span class="ticket__code">VCK-DAY</span>
+            <a href="https://line.me/vckcoolspace" target="_blank" rel="noopener noreferrer"
+               class="btn btn--outline-gold btn--sm" data-i18n="cta.inquire">สอบถามเพิ่มเติม</a>
+          </div>
         </div>
 
         <!-- Student Special -->
-        <div class="promo__card">
-          <div class="promo__card-icon" aria-hidden="true">🎓</div>
-          <h3 class="promo__card-title">
-            <span data-i18n="promo.student">โปรนักศึกษา</span>
-          </h3>
-          <p class="promo__card-desc" data-i18n="promo.studentDesc">
-            ส่วนลดพิเศษสำหรับนักศึกษา แสดงบัตรนักศึกษา
-          </p>
-          <a href="https://line.me/vckcoolspace" target="_blank" rel="noopener noreferrer"
-             class="btn btn--outline-gold btn--sm" data-i18n="cta.inquire">สอบถามเพิ่มเติม</a>
+        <div class="ticket">
+          <div class="ticket__body">
+            <div class="ticket__icon" aria-hidden="true">🎓</div>
+            <h3 class="ticket__name" data-i18n="promo.student">โปรนักศึกษา</h3>
+            <p class="ticket__desc" data-i18n="promo.studentDesc">
+              ส่วนลดพิเศษสำหรับนักศึกษา แสดงบัตรนักศึกษาเพื่อรับสิทธิ์
+            </p>
+          </div>
+          <div class="ticket__perf">
+            <span class="ticket__notch ticket__notch--l"></span>
+            <span class="ticket__notch ticket__notch--r"></span>
+          </div>
+          <div class="ticket__stub">
+            <span class="ticket__code">VCK-STU</span>
+            <a href="https://line.me/vckcoolspace" target="_blank" rel="noopener noreferrer"
+               class="btn btn--outline-gold btn--sm" data-i18n="cta.inquire">สอบถามเพิ่มเติม</a>
+          </div>
         </div>
 
       </div><!-- /.promo__grid -->
@@ -382,9 +381,7 @@
       <!-- Chakran Sauna -->
       <div class="services__item">
         <div class="services__item-img">
-          <div class="img-placeholder img-placeholder--service">
-            <span>Chakran Sauna</span>
-          </div>
+          <div class="img-placeholder img-placeholder--service"><span>Chakran Sauna</span></div>
         </div>
         <div class="services__item-content">
           <p class="services__item-eyebrow" data-i18n="services.saunaEye">Signature</p>
@@ -401,9 +398,7 @@
       <!-- Vclub7 Massage -->
       <div class="services__item services__item--reverse">
         <div class="services__item-img">
-          <div class="img-placeholder img-placeholder--service">
-            <span>Vclub7 Massage</span>
-          </div>
+          <div class="img-placeholder img-placeholder--service"><span>Vclub7 Massage</span></div>
         </div>
         <div class="services__item-content">
           <p class="services__item-eyebrow" data-i18n="services.massageEye">Wellness</p>
@@ -420,9 +415,7 @@
       <!-- Ryokan & Chino Villa -->
       <div class="services__item">
         <div class="services__item-img">
-          <div class="img-placeholder img-placeholder--service">
-            <span>Ryokan &amp; Chino Villa</span>
-          </div>
+          <div class="img-placeholder img-placeholder--service"><span>Ryokan &amp; Chino Villa</span></div>
         </div>
         <div class="services__item-content">
           <p class="services__item-eyebrow" data-i18n="services.stayEye">Stay</p>
@@ -443,16 +436,14 @@
       <!-- IKUZE Coffee Bar -->
       <div class="services__item services__item--reverse">
         <div class="services__item-img">
-          <div class="img-placeholder img-placeholder--service">
-            <span>IKUZE Coffee Bar</span>
-          </div>
+          <div class="img-placeholder img-placeholder--service"><span>IKUZE Coffee Bar</span></div>
         </div>
         <div class="services__item-content">
           <p class="services__item-eyebrow" data-i18n="services.coffeeEye">Café</p>
           <h3 class="services__item-title" data-i18n="services.coffeeTitle">☕ IKUZE Coffee Bar</h3>
           <p class="services__item-desc" data-i18n="services.coffeeDesc">
             คาเฟ่บรรยากาศผ่อนคลาย พร้อมเครื่องดื่มและของว่าง
-            เปิดให้บริการระหว่างใช้สิ่งอำนวยความสะดวกต่าง ๆ
+            เปิดให้บริการระหว่างใช้สิ่งอำนวยความสะดวกต่างๆ
           </p>
         </div>
       </div>
@@ -462,7 +453,7 @@
 
 
   <!-- ═══════════════════════════════════════════
-       GALLERY SECTION
+       GALLERY SECTION — 3×2 Equal Grid
   ═══════════════════════════════════════════ -->
   <section id="gallery" class="section gallery">
     <div class="container">
@@ -473,41 +464,29 @@
         <div class="section-divider"></div>
       </div>
 
+      <!-- 3 cols × 2 rows = 6 equal image slots -->
       <div class="gallery__grid">
-        <div class="gallery__item gallery__item--large">
-          <div class="img-placeholder img-placeholder--gallery">
-            <span>Photo 1</span>
-          </div>
+        <div class="gallery__item">
+          <div class="img-placeholder img-placeholder--gallery"><span>Photo 1</span></div>
         </div>
         <div class="gallery__item">
-          <div class="img-placeholder img-placeholder--gallery">
-            <span>Photo 2</span>
-          </div>
+          <div class="img-placeholder img-placeholder--gallery"><span>Photo 2</span></div>
         </div>
         <div class="gallery__item">
-          <div class="img-placeholder img-placeholder--gallery">
-            <span>Photo 3</span>
-          </div>
+          <div class="img-placeholder img-placeholder--gallery"><span>Photo 3</span></div>
         </div>
         <div class="gallery__item">
-          <div class="img-placeholder img-placeholder--gallery">
-            <span>Photo 4</span>
-          </div>
+          <div class="img-placeholder img-placeholder--gallery"><span>Photo 4</span></div>
         </div>
         <div class="gallery__item">
-          <div class="img-placeholder img-placeholder--gallery">
-            <span>Photo 5</span>
-          </div>
+          <div class="img-placeholder img-placeholder--gallery"><span>Photo 5</span></div>
         </div>
         <div class="gallery__item">
-          <div class="img-placeholder img-placeholder--gallery">
-            <span>Photo 6</span>
-          </div>
+          <div class="img-placeholder img-placeholder--gallery"><span>Photo 6</span></div>
         </div>
       </div>
 
       <div class="gallery__footer">
-        <!-- Popup toggle (Phase 4 will add JS) -->
         <button class="btn btn--outline-gold gallery__all-btn" data-i18n="gallery.all">
           All Photos &nbsp;›
         </button>
@@ -515,7 +494,7 @@
 
     </div><!-- /.container -->
 
-    <!-- Gallery Popup (structure only, Phase 4 will wire JS) -->
+    <!-- Gallery Lightbox Popup -->
     <div class="gallery__popup" id="gallery-popup" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Gallery">
       <div class="gallery__popup-overlay"></div>
       <div class="gallery__popup-inner">
@@ -658,6 +637,14 @@
     </div>
   </footer>
 
+  <!-- ═══ Scripts ═══ -->
+  <script src="js/fallback-data.js"></script>
+  <script src="js/lang.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/hero.js"></script>
+  <script src="js/events.js"></script>
+  <script src="js/promotion.js"></script>
+  <script src="js/gallery.js"></script>
+
 </body>
 </html>
-

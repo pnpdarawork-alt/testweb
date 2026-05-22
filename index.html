@@ -4,6 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="VCK Cool Space — Chakran Sauna, Onsen, Pool, Gym & Stay. Bangkok since 1995." />
+
+  <!-- Content Security Policy
+       connect-src: allows fetch() to the Cloudflare Worker
+       style-src:   allows Google Fonts stylesheet + inline styles
+       font-src:    allows Google Fonts files from gstatic.com
+       img-src:     allows Cloudinary, Google Drive, and data URIs
+  -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline';
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    img-src 'self' data: https://res.cloudinary.com https://drive.google.com https://lh3.googleusercontent.com;
+    connect-src 'self' https://vck-data.panupondara-work.workers.dev;
+    font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com;
+  ">
+
   <title>VCK Cool Space — Chakran</title>
 
   <!-- Google Fonts -->

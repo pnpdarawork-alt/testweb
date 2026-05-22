@@ -69,15 +69,18 @@ function getThaiNow() {
   return { dateStr, dayName: DAY_NAMES[dayIdx], dayIdx };
 }
 
-/* Date of Thursday in the current Bangkok week (for the week-grid THU card) */
+/* Date of the upcoming Thursday in Bangkok time (today if today is Thursday).
+   Format matches Google Sheets DATE column: "YYYY-MM-DD". */
 function getWeekThuDate() {
-  const now        = new Date();
-  const bangkokStr = now.toLocaleString('en-US', { timeZone: 'Asia/Bangkok' });
-  const bk         = new Date(bangkokStr);
-  bk.setDate(bk.getDate() + (4 - bk.getDay())); // 4 = Thursday
-  const y = bk.getFullYear();
-  const m = String(bk.getMonth() + 1).padStart(2, '0');
-  const d = String(bk.getDate()).padStart(2, '0');
+  const now           = new Date();
+  const bangkokTime   = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Bangkok' }));
+  const dayOfWeek     = bangkokTime.getDay();          // Sun=0 … Sat=6
+  const daysUntilThu  = (4 - dayOfWeek + 7) % 7;       // 0 if Thu, else days forward to Thu
+  const thu           = new Date(bangkokTime);
+  thu.setDate(bangkokTime.getDate() + daysUntilThu);
+  const y = thu.getFullYear();
+  const m = String(thu.getMonth() + 1).padStart(2, '0');
+  const d = String(thu.getDate()).padStart(2, '0');
   return `${y}-${m}-${d}`;
 }
 
@@ -111,8 +114,11 @@ function renderTodayCard(recurring, weeklyThu, todayInfo) {
 
   let ev = null;
   if (todayInfo.dayName === 'Thursday') {
+    console.log('[events] today THU — target date:', todayInfo.dateStr);
+    console.log('[events] today THU — Weekly_THU DATE values:',
+      weeklyThu.map(e => e.DATE));
     ev = weeklyThu.find(e => e.DATE === todayInfo.dateStr) || null;
-    console.log('[events] today THU event (Weekly_THU):', ev);
+    console.log('[events] today THU event matched:', ev);
   } else {
     ev = recurring.find(e => normalizeDayName(e.DAY) === todayInfo.dayName) || null;
     console.log('[events] today event (Recurring_Events):', ev);
@@ -280,7 +286,11 @@ async function initEvents() {
     let dayEvents = [];
     if (isThu) {
       const thuDate = getWeekThuDate();
+      console.log('[events] THU lookup — target date:', thuDate);
+      console.log('[events] THU lookup — Weekly_THU DATE values:',
+        weeklyThu.map(e => e.DATE));
       const thu = weeklyThu.find(e => e.DATE === thuDate);
+      console.log('[events] THU lookup — matched row:', thu);
       if (thu) dayEvents = [thu];
     } else {
       dayEvents = recurring

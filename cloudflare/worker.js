@@ -100,7 +100,7 @@ function rowsToObjects(values) {
   const headers = values[0];
   return values.slice(1).map(row => {
     const obj = {};
-    headers.forEach((h, i) => { obj[h] = row[i] ?? ''; });
+    headers.forEach((h, i) => { obj[h] = row[i] || ''; });
     return obj;
   });
 }
@@ -123,14 +123,14 @@ async function fetchSheet(sheetName, spreadsheetId, accessToken, useCache, ctx) 
   const { values } = await res.json();
   const data = rowsToObjects(values);
 
-  if (useCache) {
-    ctx.waitUntil(cache.put(
-      cacheKey,
-      new Response(JSON.stringify(data), {
-        headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=86400' },
-      }),
-    ));
-  }
+  /* Always repopulate the cache after a live Sheets fetch, even on
+     refresh=true, so subsequent normal requests get the fresh data. */
+  ctx.waitUntil(cache.put(
+    cacheKey,
+    new Response(JSON.stringify(data), {
+      headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=86400' },
+    }),
+  ));
 
   return data;
 }

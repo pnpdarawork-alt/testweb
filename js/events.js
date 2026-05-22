@@ -52,10 +52,16 @@ function normalizeDayName(val) {
 
 /* Current date/time in Bangkok (GMT+7) */
 function getThaiNow() {
-  const bangkokStr = new Date().toLocaleString('en-CA', { timeZone: 'Asia/Bangkok' });
-  const dateStr    = bangkokStr.split(',')[0].trim(); // 'YYYY-MM-DD'
-  const d          = new Date(dateStr + 'T12:00:00'); // noon — immune to UTC midnight shift
-  return { dateStr, dayName: DAY_NAMES[d.getDay()], dayIdx: d.getDay() };
+  const now        = new Date();
+  const bangkokStr = now.toLocaleString('en-US', { timeZone: 'Asia/Bangkok' });
+  const bk         = new Date(bangkokStr);
+  const dayIdx     = bk.getDay();
+  // Build YYYY-MM-DD in Bangkok time
+  const y  = bk.getFullYear();
+  const m  = String(bk.getMonth() + 1).padStart(2, '0');
+  const dy = String(bk.getDate()).padStart(2, '0');
+  const dateStr = `${y}-${m}-${dy}`;
+  return { dateStr, dayName: DAY_NAMES[dayIdx], dayIdx };
 }
 
 /* ── DOM helpers ────────────────────────────────── */
@@ -88,7 +94,7 @@ function renderTodayCard(recurring, weeklyThu, todayInfo) {
 
   let ev = null;
   if (todayInfo.dayName === 'Thursday') {
-    ev = weeklyThu.find(e => e.DATE === todayInfo.dateStr) || weeklyThu[0] || null;
+    ev = weeklyThu.find(e => e.DATE === todayInfo.dateStr) || null;
     console.log('[events] today THU event (Weekly_THU):', ev);
   } else {
     ev = recurring.find(e => normalizeDayName(e.DAY) === todayInfo.dayName) || null;
@@ -108,11 +114,12 @@ function renderTodayCard(recurring, weeklyThu, todayInfo) {
     return;
   }
 
-  const dayEl   = section.querySelector('.events__today-day');
-  const nameEl  = section.querySelector('.events__today-name');
-  const altEl   = section.querySelector('.events__today-name-alt');
-  const timeEl  = section.querySelector('.events__today-time');
-  const imgWrap = section.querySelector('.events__today-image');
+  const dayEl    = section.querySelector('.events__today-day');
+  const nameEl   = section.querySelector('.events__today-name');
+  const altEl    = section.querySelector('.events__today-name-alt');
+  const timeEl   = section.querySelector('.events__today-time');
+  const detailEl = section.querySelector('.events__today-detail');
+  const imgWrap  = section.querySelector('.events__today-image');
 
   if (dayEl)  dayEl.textContent  = todayInfo.dayName;
   if (nameEl) nameEl.textContent = ev.TH  || ev.EN || '';
@@ -122,6 +129,19 @@ function renderTodayCard(recurring, weeklyThu, todayInfo) {
     timeEl.textContent = '';
     if (icon) timeEl.appendChild(icon);
     timeEl.appendChild(document.createTextNode(' ' + evTime(ev)));
+  }
+  if (detailEl) {
+    const detail = evDetail(ev);
+    detailEl.textContent = detail;
+    detailEl.style.display = detail ? '' : 'none';
+  } else {
+    const detail = evDetail(ev);
+    if (detail && timeEl) {
+      const p = document.createElement('p');
+      p.className = 'events__today-detail events__card-detail';
+      p.textContent = detail;
+      timeEl.insertAdjacentElement('afterend', p);
+    }
   }
   if (imgWrap && ev.IMAGE_URL) {
     const img = makeImg(ev.IMAGE_URL, ev.EN);

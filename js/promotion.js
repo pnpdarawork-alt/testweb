@@ -1,23 +1,33 @@
 /* ═══════════════════════════════════════════════════════
    VCK COOL SPACE — Promotion Renderer
-   Sheet fields: ORDER, CODE, TH, EN, ZH_S, ZH_T,
-                 DESC_TH, DESC_EN, DESC_ZHS, DESC_ZHT, STATUS
+   Sheet fields: ID, TH_TITLE, EN_TITLE, ZH_S_TITLE, ZH_T_TITLE,
+                 TH_DETAIL, EN_DETAIL, ZH_S_DETAIL, ZH_T_DETAIL,
+                 CTA_TH, CTA_EN, CTA_ZH_S, CTA_ZH_T, CTA_URL,
+                 STATUS, ORDER
 ═══════════════════════════════════════════════════════ */
 
 function getPromoName(item) {
   const lang = (typeof getLang === 'function') ? getLang() : 'th';
-  if (lang === 'zh-s') return item.ZH_S || item.EN || item.TH || '';
-  if (lang === 'zh-t') return item.ZH_T || item.EN || item.TH || '';
-  if (lang === 'en')   return item.EN   || item.TH || '';
-  return item.TH || item.EN || '';
+  if (lang === 'zh-s') return item.ZH_S_TITLE || item.EN_TITLE || item.TH_TITLE || '';
+  if (lang === 'zh-t') return item.ZH_T_TITLE || item.EN_TITLE || item.TH_TITLE || '';
+  if (lang === 'en')   return item.EN_TITLE   || item.TH_TITLE || '';
+  return item.TH_TITLE || item.EN_TITLE || '';
 }
 
 function getPromoDesc(item) {
   const lang = (typeof getLang === 'function') ? getLang() : 'th';
-  if (lang === 'zh-s') return item.DESC_ZHS || item.DESC_EN || item.DESC_TH || '';
-  if (lang === 'zh-t') return item.DESC_ZHT || item.DESC_EN || item.DESC_TH || '';
-  if (lang === 'en')   return item.DESC_EN  || item.DESC_TH || '';
-  return item.DESC_TH || item.DESC_EN || '';
+  if (lang === 'zh-s') return item.ZH_S_DETAIL || item.EN_DETAIL || item.TH_DETAIL || '';
+  if (lang === 'zh-t') return item.ZH_T_DETAIL || item.EN_DETAIL || item.TH_DETAIL || '';
+  if (lang === 'en')   return item.EN_DETAIL   || item.TH_DETAIL || '';
+  return item.TH_DETAIL || item.EN_DETAIL || '';
+}
+
+function getPromoCta(item) {
+  const lang = (typeof getLang === 'function') ? getLang() : 'th';
+  if (lang === 'zh-s') return item.CTA_ZH_S || item.CTA_EN || item.CTA_TH || 'สอบถาม';
+  if (lang === 'zh-t') return item.CTA_ZH_T || item.CTA_EN || item.CTA_TH || 'สอบถาม';
+  if (lang === 'en')   return item.CTA_EN   || item.CTA_TH || 'Enquire';
+  return item.CTA_TH || item.CTA_EN || 'สอบถาม';
 }
 
 const TICKET_ICONS = { 0: '🎫', 1: '🧡', 2: '🎟️', 3: '🎓' };
@@ -29,8 +39,10 @@ function buildTicketCard(item, idx) {
   card.className = 'ticket' + (idx === 1 ? ' ticket--featured' : '');
   card.dataset.promoIndex = idx;
 
-  /* Dynamic name/desc come from API in the current language — no data-i18n.
-     The "Inquire" CTA stays static and keeps data-i18n. */
+  const ctaUrl = item.CTA_URL || 'https://line.me/vckcoolspace';
+  const ctaText = getPromoCta(item);
+  const code = item.ID || String(idx + 1);
+
   card.innerHTML = `
     <div class="ticket__body">
       <div class="ticket__icon" aria-hidden="true">${TICKET_ICONS[idx] || '🎫'}</div>
@@ -42,9 +54,9 @@ function buildTicketCard(item, idx) {
       <span class="ticket__notch ticket__notch--r"></span>
     </div>
     <div class="ticket__stub">
-      <span class="ticket__code">${item.CODE || 'VCK-' + String(idx+1).padStart(3,'0')}</span>
-      <a href="https://line.me/vckcoolspace" target="_blank" rel="noopener noreferrer"
-         class="btn btn--gold btn--sm" data-i18n="cta.inquire">สอบถาม</a>
+      <span class="ticket__code">${code}</span>
+      <a href="${ctaUrl}" target="_blank" rel="noopener noreferrer"
+         class="btn btn--gold btn--sm">${ctaText}</a>
     </div>`;
 
   return card;
@@ -56,7 +68,6 @@ function renderPromoCards() {
   if (!grid) return;
   grid.innerHTML = '';
   _promos.slice(0, 4).forEach((item, i) => grid.appendChild(buildTicketCard(item, i)));
-  if (typeof applyI18n === 'function') applyI18n(grid);
 }
 
 async function initPromotion() {

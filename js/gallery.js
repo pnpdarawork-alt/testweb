@@ -114,4 +114,12 @@ async function initGallery() {
     ?.addEventListener('click', openLightbox);
 }
 
+function renderGalleryGrid() {
+  const grid = document.querySelector('.gallery__grid');
+  if (!grid || !allGalleryImages.length) return;
+  grid.innerHTML = '';
+  allGalleryImages.slice(0, 6).forEach(item => grid.appendChild(buildGalleryItem(item)));
+}
+
 document.addEventListener('DOMContentLoaded', initGallery);
+document.addEventListener('langchange', renderGalleryGrid);

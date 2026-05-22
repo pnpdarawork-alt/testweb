@@ -15,9 +15,10 @@
     default-src 'self';
     script-src 'self' 'unsafe-inline';
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-    img-src 'self' data: https://res.cloudinary.com https://drive.google.com https://lh3.googleusercontent.com;
-    connect-src 'self' https://vck-data.panupondara-work.workers.dev;
+    img-src 'self' data: blob: https://res.cloudinary.com https://maps.gstatic.com https://maps.googleapis.com https://lh3.googleusercontent.com;
+    connect-src 'self' https://vck-data.panupondara-work.workers.dev https://maps.googleapis.com;
     font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com;
+    frame-src 'self' https://www.google.com/maps/;
   ">
 
   <title>VCK Cool Space — Chakran</title>
@@ -603,10 +604,9 @@
         <!-- Right: Map -->
         <div class="contact__map">
           <iframe
-            title="VCK Cool Space Location"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.2895!2d100.5668!3d13.7748!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDQ2JzI5LjMiTiAxMDDCsDM0JzAwLjUiRQ!5e0!3m2!1sen!2sth!4v1"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3874.9530758145675!2d100.5414509!3d13.781702300000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e29c1d3734560d%3A0x5a538db7ec1c864e!2sVCK%20Cool%20Space!5e0!3m2!1sen!2sth!4v1779457945606!5m2!1sen!2sth"
             width="100%"
-            height="100%"
+            height="450"
             style="border:0;"
             allowfullscreen=""
             loading="lazy"

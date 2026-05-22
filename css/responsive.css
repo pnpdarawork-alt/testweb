@@ -121,32 +121,37 @@
   font-size: 30px;
 }
 
-.events__grid {
-  grid-template-columns: 1fr;
-  gap: 12px;
+/* Week grid: single column on mobile */
+.events__week {
+  grid-template-columns: 1fr !important;
+}
+
+.events__card--row1,
+.events__card--row2 {
+  grid-column: span 1 !important;
 }
 
 .events__card--multi .events__card-img {
   display: none;
 }
 
-/* Stack FRI/SAT/SUN mini events side by side on mobile */
+/* FRI/SAT/SUN mini events: stack vertically on mobile */
 .events__card-multi-row {
-  flex-direction: row;
+  flex-direction: column;
   gap: 12px;
 }
 
 .events__mini-event {
   flex: 1;
-  flex-direction: column;
+  flex-direction: row;
 }
 
 .events__mini-event .img-placeholder--mini {
-  width: 100%;
-  height: 80px;
+  width: 72px;
+  height: 72px;
   min-height: unset;
   border-radius: var(--radius);
-  margin-bottom: 8px;
+  flex-shrink: 0;
 }
 
 /* ── Promotion ── */
@@ -271,12 +276,20 @@
     grid-template-columns: 1fr 1fr;
   }
 
-  /* Events grid: 3 columns on tablet */
-  .events__grid {
-    grid-template-columns: repeat(3, 1fr);
+  /* Week grid: restore multi-column on tablet (style.css 12-col grid takes over) */
+  .events__week {
+    grid-template-columns: repeat(12, 1fr) !important;
   }
 
-  /* Events mini events back to column */
+  .events__card--row1 {
+    grid-column: span 3 !important;
+  }
+
+  .events__card--row2 {
+    grid-column: span 4 !important;
+  }
+
+  /* Multi-event rows stay vertical on tablet */
   .events__card-multi-row {
     flex-direction: column;
   }
@@ -454,12 +467,7 @@
     padding: 56px 56px 56px 0;
   }
 
-  /* ── Events grid: 7 columns ── */
-  .events__grid {
-    grid-template-columns: repeat(7, 1fr);
-    gap: 12px;
-  }
-
+  /* ── Events: multi-event layout ── */
   .events__card-multi-row {
     flex-direction: column;
     gap: 12px;

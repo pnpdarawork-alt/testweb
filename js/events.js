@@ -15,6 +15,10 @@ const DAY_ABBR  = ['sun','mon','tue','wed','thu','fri','sat'];
 // Display order: Mon(1)→Tue(2)→Wed(3)→Thu(4)→Fri(5)→Sat(6)→Sun(0)
 const WEEK_ORDER = [1, 2, 3, 4, 5, 6, 0];
 
+// Module-level cache so langchange can re-render without re-fetching
+let _recurring = [];
+let _weeklyThu = [];
+
 /* ── Field accessors ──────────────────────────────── */
 
 function evName(ev) {
@@ -249,35 +253,20 @@ function buildWeekCard(dayIdx, dayEvents, isThu, isToday) {
   return card;
 }
 
-/* ── Main init ──────────────────────────────────── */
+/* ── Render week section (called on init and langchange) ── */
 
-async function initEvents() {
+function renderWeekSection() {
   const week = document.querySelector('.events__week');
-  if (!week) { console.error('[events] FATAL: .events__week not found'); return; }
-
-  console.log('[events] fetching data…');
-  let recurring = [], weeklyThu = [];
-  try {
-    [recurring, weeklyThu] = await Promise.all([
-      fetchRecurringEvents(),
-      fetchWeeklyThu(),
-    ]);
-  } catch (err) {
-    console.error('[events] Promise.all failed:', err);
-  }
-
-  console.log('[events] recurring:', recurring.length, recurring);
-  console.log('[events] weeklyThu:', weeklyThu.length, weeklyThu);
+  if (!week) return;
 
   const todayInfo = getThaiNow();
   console.log('[events] Bangkok now:', todayInfo);
 
-  renderTodayCard(recurring, weeklyThu, todayInfo);
+  renderTodayCard(_recurring, _weeklyThu, todayInfo);
 
-  // Remove stale static cards, keep the h3 title intact
+  // Remove stale cards, keep the h3 title intact
   week.querySelectorAll('.events__card').forEach(c => c.remove());
 
-  // Always render in fixed MON → TUE → WED → THU → FRI → SAT → SUN order
   for (const dayIdx of WEEK_ORDER) {
     const dayName = DAY_NAMES[dayIdx];
     const isThu   = dayName === 'Thursday';
@@ -288,19 +277,19 @@ async function initEvents() {
       const thuDate = getWeekThuDate();
       console.log('[events] THU lookup — target date:', thuDate);
       console.log('[events] THU lookup — Weekly_THU DATE values:',
-        weeklyThu.map(e => e.DATE));
-      const thu = weeklyThu.find(e => e.DATE === thuDate);
+        _weeklyThu.map(e => e.DATE));
+      const thu = _weeklyThu.find(e => e.DATE === thuDate);
       console.log('[events] THU lookup — matched row:', thu);
       if (thu) dayEvents = [thu];
     } else {
-      dayEvents = recurring
+      dayEvents = _recurring
         .filter(e => normalizeDayName(e.DAY) === dayName)
         .sort((a, b) => (Number(a.SLOT) || 0) - (Number(b.SLOT) || 0)
                      || (a.TIME_1 || '').localeCompare(b.TIME_1 || ''));
     }
 
     if (!dayEvents.length) {
-      dayEvents = [{ TH: '—', EN: '—', TIME_1: '' }];
+      dayEvents = [{ TH: '—', EN: '—' }];
     }
 
     console.log(`[events] ${dayName}${isToday ? ' ★TODAY' : ''}:`, dayEvents);
@@ -310,20 +299,27 @@ async function initEvents() {
   if (typeof switchLanguage === 'function') switchLanguage(getLang());
 }
 
-document.addEventListener('DOMContentLoaded', initEvents);
+/* ── Main init ──────────────────────────────────── */
 
-document.addEventListener('langchange', () => {
-  const lang = (typeof getLang === 'function') ? getLang() : 'th';
-  const dict = (typeof translations !== 'undefined')
-    ? (translations[lang] || translations.th)
-    : {};
-  // Re-translate day labels on language switch
-  document.querySelectorAll('.events__card-day[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    if (dict[key]) el.textContent = dict[key];
-  });
-  // Re-render event names in new language
-  document.querySelectorAll('.events__card-name, .events__mini-name').forEach(el => {
-    el.closest('.events__card');
-  });
-});
+async function initEvents() {
+  const week = document.querySelector('.events__week');
+  if (!week) { console.error('[events] FATAL: .events__week not found'); return; }
+
+  console.log('[events] fetching data…');
+  try {
+    [_recurring, _weeklyThu] = await Promise.all([
+      fetchRecurringEvents(),
+      fetchWeeklyThu(),
+    ]);
+  } catch (err) {
+    console.error('[events] Promise.all failed:', err);
+  }
+
+  console.log('[events] recurring:', _recurring.length, _recurring);
+  console.log('[events] weeklyThu:', _weeklyThu.length, _weeklyThu);
+
+  renderWeekSection();
+}
+
+document.addEventListener('DOMContentLoaded', initEvents);
+document.addEventListener('langchange', renderWeekSection);

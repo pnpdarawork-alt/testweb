@@ -18,6 +18,8 @@ function getPromoName(item) {
 
 const TICKET_ICONS = { 0: '🎫', 1: '🧡', 2: '🎟️', 3: '🎓' };
 
+let _promos = [];
+
 function buildTicketCard(item, idx) {
   const card = document.createElement('div');
   card.className = 'ticket' + (idx === 1 ? ' ticket--featured' : '');
@@ -45,6 +47,16 @@ function buildTicketCard(item, idx) {
   return card;
 }
 
+function renderPromoCards() {
+  const grid = document.querySelector('.promo__grid');
+  if (!grid || !_promos.length) return;
+  grid.innerHTML = '';
+  _promos.slice(0, 4).forEach((item, i) => {
+    grid.appendChild(buildTicketCard(item, i));
+  });
+  if (typeof switchLanguage === 'function') switchLanguage(getLang());
+}
+
 async function initPromotion() {
   const grid = document.querySelector('.promo__grid');
   if (!grid) return;
@@ -52,28 +64,9 @@ async function initPromotion() {
   const promos = await fetchPromotion();
   if (!promos || promos.length === 0) return;
 
-  grid.innerHTML = '';
-  promos.slice(0, 4).forEach((item, i) => {
-    grid.appendChild(buildTicketCard(item, i));
-  });
-
-  if (typeof switchLanguage === 'function') switchLanguage(getLang());
-}
-
-function refreshPromoLang() {
-  document.querySelectorAll('.ticket').forEach((card, idx) => {
-    const nameEl = card.querySelector('.ticket__name');
-    const descEl = card.querySelector('.ticket__desc');
-    if (nameEl) {
-      const key = nameEl.getAttribute('data-i18n');
-      if (key && typeof t === 'function') nameEl.textContent = t(key);
-    }
-    if (descEl) {
-      const key = descEl.getAttribute('data-i18n');
-      if (key && typeof t === 'function') descEl.textContent = t(key);
-    }
-  });
+  _promos = promos;
+  renderPromoCards();
 }
 
 document.addEventListener('DOMContentLoaded', initPromotion);
-document.addEventListener('langchange', refreshPromoLang);
+document.addEventListener('langchange', renderPromoCards);

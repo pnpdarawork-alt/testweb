@@ -303,6 +303,12 @@
     grid-column: span 4 !important;
   }
 
+  /* Today multi-event: restore 2-column side-by-side on tablet */
+  .events__today-events {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
   /* Multi-event rows stay vertical on tablet */
   .events__card-multi-row {
     flex-direction: column;
@@ -478,7 +484,7 @@
 
   /* ── Events today ── */
   .events__today-info {
-    padding: 56px 56px 56px 0;
+    padding: 36px 40px 36px 0;
   }
 
   /* ── Events: multi-event layout ── */

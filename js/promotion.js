@@ -2,9 +2,8 @@
    VCK COOL SPACE — Promotion Renderer
    Sheet fields: ID, TH_TITLE, EN_TITLE, ZH_S_TITLE, ZH_T_TITLE,
                  TH_DETAIL, EN_DETAIL, ZH_S_DETAIL, ZH_T_DETAIL,
-                 CTA_URL, STATUS, ORDER
-   CTA button text is NOT fetched — it comes from lang.js
-   translations keyed by `promo.cta.<ID>`.
+                 IMAGE_URL, CTA_URL, STATUS, ORDER
+   CTA button text comes from lang.js keyed by `promo.cta.<ID>`.
 ═══════════════════════════════════════════════════════ */
 
 function getPromoName(item) {
@@ -35,11 +34,17 @@ function buildTicketCard(item, idx) {
   const ctaUrl  = item.CTA_URL || 'https://line.me/vckcoolspace';
   const ctaKey  = 'promo.cta.' + (item.ID || (idx + 1));
   const code    = item.ID || String(idx + 1);
+  const name    = getPromoName(item);
+
+  const imgHtml = (item.IMAGE_URL && item.IMAGE_URL.trim())
+    ? `<div class="ticket__img"><img src="${item.IMAGE_URL}" alt="${name}" loading="lazy"></div>`
+    : '';
 
   card.innerHTML = `
+    ${imgHtml}
     <div class="ticket__body">
-      <div class="ticket__icon" aria-hidden="true">${TICKET_ICONS[idx] || '🎫'}</div>
-      <h3 class="ticket__name">${getPromoName(item)}</h3>
+      ${imgHtml ? '' : `<div class="ticket__icon" aria-hidden="true">${TICKET_ICONS[idx] || '🎫'}</div>`}
+      <h3 class="ticket__name">${name}</h3>
       <p class="ticket__desc">${getPromoDesc(item)}</p>
     </div>
     <div class="ticket__perf">

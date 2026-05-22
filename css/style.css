@@ -553,11 +553,11 @@ button {
 
 .events__today-image {
   position: relative;
-  min-height: 420px;
+  min-height: 280px;
 }
 
 .events__today-info {
-  padding: 48px 48px 48px 0;
+  padding: 32px 32px 32px 0;
 }
 
 .events__today-day {
@@ -571,7 +571,7 @@ button {
 
 .events__today-name {
   font-family: var(--font-serif);
-  font-size: 40px;
+  font-size: 32px;
   font-weight: 600;
   color: var(--dark);
   margin-bottom: 4px;
@@ -610,17 +610,17 @@ button {
 /* ── Today Card — Multi-event (Fri/Sat/Sun) ── */
 .events__today-card--multi {
   display: block;
-  padding: 40px 48px;
+  padding: 28px 36px;
 }
 
 .events__today-multi-header {
-  margin-bottom: 28px;
+  margin-bottom: 20px;
 }
 
 .events__today-events {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 36px;
+  gap: 24px;
 }
 
 .events__today-event {
@@ -634,13 +634,13 @@ button {
   aspect-ratio: 16 / 10;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  margin-bottom: 18px;
+  margin-bottom: 14px;
   background: var(--border);
 }
 
 .events__today-event-name {
   font-family: var(--font-serif);
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 600;
   color: var(--dark);
   margin-bottom: 4px;
@@ -877,9 +877,24 @@ button {
   box-shadow: 0 0 0 1px rgba(201,169,110,0.15);
 }
 
+/* Optional image at top of ticket */
+.ticket__img {
+  height: 180px;
+  overflow: hidden;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  flex-shrink: 0;
+}
+
+.ticket__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 /* Body section */
 .ticket__body {
-  padding: 36px 32px 24px;
+  padding: 28px 32px 20px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -985,10 +1000,21 @@ button {
 }
 
 .services__item-img {
+  position: relative;
   min-height: 420px;
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: 0 16px 64px rgba(0,0,0,0.12);
+}
+
+.services__item-img > img,
+.services__item-img > .img-placeholder {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
 }
 
 .services__item-eyebrow {
@@ -1132,6 +1158,127 @@ button {
   height: 220px;
   object-fit: cover;
   display: block;
+}
+
+/* Grid popup — pagination */
+.gallery__popup-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.gallery__popup-prev,
+.gallery__popup-next {
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  padding: 8px 20px;
+  border: 1px solid rgba(201,169,110,0.3);
+  border-radius: var(--radius);
+  transition: all var(--transition);
+}
+
+.gallery__popup-prev:hover,
+.gallery__popup-next:hover {
+  background: rgba(201,169,110,0.1);
+  border-color: var(--gold);
+}
+
+.gallery__popup-prev:disabled,
+.gallery__popup-next:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* Single-photo fullscreen lightbox */
+.gallery__photo-popup {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 2001;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery__photo-popup[aria-hidden="false"] {
+  display: flex;
+}
+
+.gallery__photo-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.95);
+  cursor: pointer;
+}
+
+.gallery__photo-inner {
+  position: relative;
+  z-index: 1;
+  max-width: min(90vw, 1200px);
+  max-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery__photo-img {
+  max-width: 100%;
+  max-height: 90vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: var(--radius);
+  display: block;
+}
+
+.gallery__photo-close {
+  position: absolute;
+  top: -44px;
+  right: 0;
+  font-size: 20px;
+  color: rgba(255,255,255,0.7);
+  padding: 8px 12px;
+  line-height: 1;
+  background: transparent;
+  border-radius: var(--radius);
+  transition: color var(--transition);
+}
+
+.gallery__photo-close:hover { color: var(--gold); }
+
+.gallery__photo-prev,
+.gallery__photo-next {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  font-size: 32px;
+  color: rgba(255,255,255,0.75);
+  padding: 14px 18px;
+  background: rgba(0,0,0,0.45);
+  border-radius: var(--radius);
+  line-height: 1;
+  transition: background var(--transition), color var(--transition);
+}
+
+.gallery__photo-prev { left: 16px; }
+.gallery__photo-next { right: 16px; }
+
+.gallery__photo-prev:hover,
+.gallery__photo-next:hover {
+  background: rgba(0,0,0,0.75);
+  color: var(--gold);
+}
+
+.gallery__photo-prev:disabled,
+.gallery__photo-next:disabled {
+  opacity: 0.25;
+  cursor: default;
 }
 
 /* ───────────────────────────────

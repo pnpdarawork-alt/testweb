@@ -10,11 +10,11 @@
                       STATUS
    Promotion:         ID, TH_TITLE, EN_TITLE, ZH_S_TITLE, ZH_T_TITLE,
                       TH_DETAIL, EN_DETAIL, ZH_S_DETAIL, ZH_T_DETAIL,
-                      CTA_URL, STATUS, ORDER
+                      IMAGE_URL, CTA_URL, STATUS, ORDER
    Gallery:           ORDER, IMAGE_URL, STATUS
    Service:           ID, TH_TITLE, EN_TITLE, ZH_S_TITLE, ZH_T_TITLE,
                       TH_DETAIL, EN_DETAIL, ZH_S_DETAIL, ZH_T_DETAIL,
-                      IMAGE_URL, STATUS
+                      IMAGE_URL, TH, EN, ZH_S, ZH_T, CTA_URL, STATUS
 ═══════════════════════════════════════════════════════ */
 
 const FALLBACK = {
@@ -56,7 +56,7 @@ const FALLBACK = {
 
   promotion: [
     {
-      ORDER: '1', STATUS: 'active', ID: '1',
+      ORDER: '1', STATUS: 'active', ID: '1', IMAGE_URL: '',
       TH_TITLE: 'บัตร Value Package', EN_TITLE: 'Value Package', ZH_S_TITLE: '优惠套餐', ZH_T_TITLE: '優惠套餐',
       TH_DETAIL: 'ซื้อ 5 แถม 1 ราคา 1,099 บาท / ซื้อ 10 แถม 2 ราคา 2,099 บาท / บัตรเข้าใช้บริการได้ทุกวัน',
       EN_DETAIL: 'Buy 5 Get 1 Free 1,099 THB / Buy 10 Get 2 Free 2,099 THB / Valid every day',
@@ -65,7 +65,7 @@ const FALLBACK = {
       CTA_URL: 'https://line.me/vckcoolspace',
     },
     {
-      ORDER: '2', STATUS: 'active', ID: '2',
+      ORDER: '2', STATUS: 'active', ID: '2', IMAGE_URL: '',
       TH_TITLE: 'Vclub7 Membership', EN_TITLE: 'Vclub7 Membership', ZH_S_TITLE: 'Vclub7会员', ZH_T_TITLE: 'Vclub7會員',
       TH_DETAIL: 'ส่วนลดค่าเข้า + สิทธิ์พิเศษ / โปรอายุ วันอาทิตย์ (คนไทย)',
       EN_DETAIL: 'Entrance discount + special privileges / Age promotion on Sundays (Thai nationals)',
@@ -74,7 +74,7 @@ const FALLBACK = {
       CTA_URL: 'https://line.me/vckcoolspace',
     },
     {
-      ORDER: '3', STATUS: 'active', ID: '3',
+      ORDER: '3', STATUS: 'active', ID: '3', IMAGE_URL: '',
       TH_TITLE: 'โปรโมชั่นนักศึกษา', EN_TITLE: 'Student Special', ZH_S_TITLE: '学生优惠', ZH_T_TITLE: '學生優惠',
       TH_DETAIL: 'อายุไม่เกิน 23 ปี เพียง 160 บาท/ครั้ง / บัตรเข้าใช้บริการได้ทุกวัน',
       EN_DETAIL: 'Age 23 and under only 160 THB/visit / Valid every day',
@@ -83,7 +83,7 @@ const FALLBACK = {
       CTA_URL: 'https://line.me/vckcoolspace',
     },
     {
-      ORDER: '4', STATUS: 'active', ID: '4',
+      ORDER: '4', STATUS: 'active', ID: '4', IMAGE_URL: '',
       TH_TITLE: 'บัตร One Day Pass', EN_TITLE: 'One Day Pass', ZH_S_TITLE: '单日通行证', ZH_T_TITLE: '單日通行證',
       TH_DETAIL: '450 บาท 1 แถม 1 / รับ 1 คะแนน / สะสม 10 คะแนน รับสิทธิ์เข้าฟรี 1 สิทธิ์ / บัตรแถมใช้ได้เฉพาะ จ–พฤ',
       EN_DETAIL: '450 THB Buy 1 Get 1 / Earn 1 point per visit / Collect 10 points get 1 free entry / Free ticket valid Mon–Thu only',
@@ -104,40 +104,44 @@ const FALLBACK = {
 
   service: [
     {
-      ID: '1', STATUS: 'active',
+      ID: '1', STATUS: 'active', IMAGE_URL: '',
       TH_TITLE: '🛁 Chakran Sauna', EN_TITLE: '🛁 Chakran Sauna', ZH_S_TITLE: '🛁 Chakran 桑拿', ZH_T_TITLE: '🛁 Chakran 桑拿',
       TH_DETAIL: 'ซาวน่าระดับพรีเมียม พร้อมออนเซ็น สระน้ำ และห้องสตีม ใจกลางกรุงเทพฯ เปิดให้บริการมาตั้งแต่ปี 1995',
       EN_DETAIL: 'Premium sauna with onsen, pool and steam room in the heart of Bangkok. Open since 1995.',
       ZH_S_DETAIL: '位于曼谷市中心的高级桑拿，配备温泉、泳池和蒸汽室，自1995年起开业。',
       ZH_T_DETAIL: '位於曼谷市中心的高級桑拿，配備溫泉、泳池和蒸汽室，自1995年起開業。',
-      IMAGE_URL: '',
+      TH: 'สอบถามเพิ่มเติม', EN: 'Enquire', ZH_S: '立即咨询', ZH_T: '立即諮詢',
+      CTA_URL: 'https://line.me/vckcoolspace',
     },
     {
-      ID: '2', STATUS: 'active',
+      ID: '2', STATUS: 'active', IMAGE_URL: '',
       TH_TITLE: '🧖 Vclub7 Massage', EN_TITLE: '🧖 Vclub7 Massage', ZH_S_TITLE: '🧖 Vclub7 按摩', ZH_T_TITLE: '🧖 Vclub7 按摩',
       TH_DETAIL: 'บริการนวดเพื่อผ่อนคลายโดยผู้เชี่ยวชาญ หลากหลายโปรแกรม จองผ่าน Line Official ได้ทันที',
       EN_DETAIL: 'Expert relaxation massage with multiple programs. Book instantly via Line Official.',
       ZH_S_DETAIL: '专业放松按摩，多种套餐可选，可通过 Line Official 即时预订。',
       ZH_T_DETAIL: '專業放鬆按摩，多種套餐可選，可通過 Line Official 即時預訂。',
-      IMAGE_URL: '',
+      TH: 'จองนวด', EN: 'Book Massage', ZH_S: '预约按摩', ZH_T: '預約按摩',
+      CTA_URL: 'https://line.me/vckcoolspace',
     },
     {
-      ID: '3', STATUS: 'active',
+      ID: '3', STATUS: 'active', IMAGE_URL: '',
       TH_TITLE: '🛏️ Ryokan & Chino Villa', EN_TITLE: '🛏️ Ryokan & Chino Villa', ZH_S_TITLE: '🛏️ Ryokan & Chino Villa', ZH_T_TITLE: '🛏️ Ryokan & Chino Villa',
       TH_DETAIL: 'พักผ่อนในบรรยากาศสไตล์ญี่ปุ่น ที่ Yaoi Ryokan หรือ Chino Villa สัมผัสความเป็นส่วนตัวในใจกลางกรุงเทพฯ',
       EN_DETAIL: 'Rest in a Japanese-inspired setting at Yaoi Ryokan or Chino Villa — an intimate retreat in central Bangkok.',
       ZH_S_DETAIL: '在 Yaoi Ryokan 或 Chino Villa 享受日式风情住宿体验，曼谷市中心的私密度假。',
       ZH_T_DETAIL: '在 Yaoi Ryokan 或 Chino Villa 享受日式風情住宿體驗，曼谷市中心的私密度假。',
-      IMAGE_URL: '',
+      TH: 'จองห้องพัก', EN: 'Book Room', ZH_S: '预订客房', ZH_T: '預訂客房',
+      CTA_URL: 'https://www.booking.com/blucabin',
     },
     {
-      ID: '4', STATUS: 'active',
+      ID: '4', STATUS: 'active', IMAGE_URL: '',
       TH_TITLE: '☕ IKUZE Coffee Bar', EN_TITLE: '☕ IKUZE Coffee Bar', ZH_S_TITLE: '☕ IKUZE 咖啡吧', ZH_T_TITLE: '☕ IKUZE 咖啡吧',
       TH_DETAIL: 'คาเฟ่บรรยากาศผ่อนคลาย พร้อมเครื่องดื่มและของว่าง เปิดให้บริการระหว่างใช้สิ่งอำนวยความสะดวกต่างๆ',
       EN_DETAIL: 'Relaxed café with drinks and light snacks, open during your facility visit.',
       ZH_S_DETAIL: '休闲咖啡馆，提供饮品和小食，开放于设施使用期间。',
       ZH_T_DETAIL: '休閒咖啡館，提供飲品和小食，開放於設施使用期間。',
-      IMAGE_URL: '',
+      TH: 'สอบถามเพิ่มเติม', EN: 'Enquire', ZH_S: '立即咨询', ZH_T: '立即諮詢',
+      CTA_URL: 'https://line.me/vckcoolspace',
     },
   ],
 
